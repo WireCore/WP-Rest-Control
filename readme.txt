@@ -115,10 +115,11 @@ The plugin ships with German translations (formal and informal). Further transla
 
 == Screenshots ==
 
-1. Route list with rules per namespace and route, source detection and the effective rule.
-2. The "Advanced" dialog: allow and deny IP addresses, roles and users per namespace or route.
-3. Settings: access, automatic allowances, error response, hardening and log.
-4. Log of blocked requests.
+1. Every registered route, grouped by namespace, with the plugin or theme that registered it.
+2. Rules per namespace and route for reading and writing, with exceptions and the effective rule.
+3. The "Advanced" dialog: allow and deny IP addresses, roles and users per namespace or route.
+4. Settings: automatic allowances for front-end plugins, error response, hardening and log.
+5. Log of blocked requests with shortened IP addresses.
 
 == Changelog ==
 
