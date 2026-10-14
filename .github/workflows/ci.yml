@@ -47,6 +47,42 @@ jobs:
             - name: Run PHPCS (PHPCompatibilityWP)
               run: composer phpcs
 
+    tests:
+        name: PHPUnit (PHP ${{ matrix.php }})
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['7.4', '8.3']
+        services:
+            mariadb:
+                image: mariadb:10.11
+                env:
+                    MARIADB_ROOT_PASSWORD: root
+                    MARIADB_DATABASE: wordpress_test
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="healthcheck.sh --connect --innodb_initialized"
+                    --health-interval=10s --health-timeout=5s --health-retries=10
+        env:
+            WP_TESTS_DB_HOST: 127.0.0.1:3306
+            WP_TESTS_DB_USER: root
+            WP_TESTS_DB_PASSWORD: root
+            WP_TESTS_DB_NAME: wordpress_test
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: mysqli
+                  coverage: none
+                  tools: composer
+            - name: Install dependencies
+              run: composer install --no-interaction --no-progress
+            - name: Run tests
+              run: composer test
+
     format:
         name: Prettier
         runs-on: ubuntu-latest

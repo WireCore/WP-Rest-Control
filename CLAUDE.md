@@ -42,7 +42,9 @@ Only `wirecore-disable-rest.php`, `uninstall.php`, `index.php`, `readme.txt`, `L
 
 ## Checks
 
-CI (`.github/workflows/ci.yml`) must stay green: PHP lint 7.4–8.4, `composer phpcs` (PHPCompatibilityWP, `phpcs.xml.dist`), `npm run format:check`, Plugin Check in strict mode on the package built from `.distignore`.
+CI (`.github/workflows/ci.yml`) must stay green: PHP lint 7.4–8.4, `composer phpcs` (PHPCompatibilityWP, `phpcs.xml.dist`), PHPUnit on PHP 7.4 and 8.3, `npm run format:check`, Plugin Check in strict mode on the package built from `.distignore`.
+
+Tests live in `tests/` (`test-*.php`, base class `WireCore_DR_TestCase`). They are integration tests against the WordPress test suite: dispatch requests through `rest_get_server()->dispatch()` (the bootstrap defines `REST_REQUEST`), and register fixture routes in `tests/bootstrap.php` – the route list is cached, so routes must exist before the first REST server is created. Run them inside the Docker container (see README) against the separate database `wordpress_test`.
 
 ## Release
 

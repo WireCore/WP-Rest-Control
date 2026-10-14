@@ -4,8 +4,8 @@
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"scripts": {
-		"format": "prettier --no-error-on-unmatched-pattern --write \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \".github/**\"",
-		"format:check": "prettier --no-error-on-unmatched-pattern --check \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \".github/**\""
+		"format": "prettier --no-error-on-unmatched-pattern --write \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \"tests/**\" \".github/**\"",
+		"format:check": "prettier --no-error-on-unmatched-pattern --check \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \"tests/**\" \".github/**\""
 	},
 	"devDependencies": {
 		"@prettier/plugin-php": "^0.22.4",

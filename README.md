@@ -87,9 +87,21 @@ The self-test under _Tools_ does not work locally, because the container cannot 
     ```bash
     docker compose exec wordpress wp --allow-root plugin install plugin-check --activate
     docker compose exec wordpress wp --allow-root plugin check wirecore-disable-rest \
-        --exclude-directories=node_modules,db-data,.vscode,.github \
+        --exclude-directories=node_modules,db-data,.vscode,.github,vendor,tests \
         --exclude-files=.gitignore,.gitattributes,.distignore,.prettierrc,.prettierignore,CLAUDE.md,README.md,CHANGELOG.md,SECURITY.md
     ```
+
+### Tests
+
+PHPUnit integration tests run against the WordPress test suite (`wp-phpunit`, WordPress core from `roots/wordpress-no-content`) and a separate database `wordpress_test` – never point them at a real database, the suite empties it.
+
+```bash
+docker run --rm -u "$(id -u):$(id -g)" -v "$PWD":/app -w /app composer:2 composer install
+docker compose exec db mariadb -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS wordpress_test"
+docker compose exec -w /var/www/html/wp-content/plugins/wirecore-disable-rest wordpress vendor/bin/phpunit
+```
+
+The database settings in [`tests/wp-tests-config.php`](tests/wp-tests-config.php) default to the Docker environment and can be overridden with `WP_TESTS_DB_HOST`, `WP_TESTS_DB_USER`, `WP_TESTS_DB_PASSWORD` and `WP_TESTS_DB_NAME`.
 
 ### Translations
 
@@ -113,6 +125,7 @@ Only the files needed by the plugin are shipped. Development files are excluded 
 
 - PHP syntax check on PHP 7.4 – 8.4
 - PHP compatibility for the minimum PHP version (`composer phpcs`, see [`phpcs.xml.dist`](phpcs.xml.dist))
+- PHPUnit on PHP 7.4 and 8.3 (`composer test`)
 - Prettier (`npm run format:check`)
 - Plugin Check on the built package, warnings included
 
