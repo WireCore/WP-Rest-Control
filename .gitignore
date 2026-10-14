@@ -1,0 +1,7 @@
+**/Thumbs.db
+**/.DS_Store
+**/.idea
+/node_modules
+/vendor
+/db-data
+/dist

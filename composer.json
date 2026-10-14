@@ -1,0 +1,22 @@
+{
+	"name": "wirecore/wirecore-disable-rest",
+	"description": "Disables the WordPress REST API selectively – globally, per namespace or per route, including routes of other plugins.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"wordpress-plugin",
+		"rest-api",
+		"security"
+	],
+	"homepage": "https://wordpress.org/plugins/wirecore-disable-rest/",
+	"authors": [
+		{
+			"name": "WireCore GmbH",
+			"homepage": "https://wirecore.net"
+		}
+	],
+	"require": {
+		"php": ">=7.4"
+	}
+}

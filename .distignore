@@ -1,0 +1,27 @@
+# Files that are not part of the plugin package (wordpress.org / dist-archive)
+/.git
+/.github
+/.wordpress-org
+/.vscode
+/node_modules
+/db-data
+/tests
+/vendor
+.distignore
+.gitattributes
+.gitignore
+.prettierrc
+.prettierignore
+.editorconfig
+docker-compose.yml
+Dockerfile
+package.json
+package-lock.json
+composer.json
+composer.lock
+phpcs.xml.dist
+phpunit.xml.dist
+README.md
+CLAUDE.md
+CHANGELOG.md
+SECURITY.md

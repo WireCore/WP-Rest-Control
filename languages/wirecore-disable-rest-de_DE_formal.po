@@ -1,0 +1,651 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WireCore Disable REST 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wirecore.net\n"
+"Last-Translator: WireCore GmbH\n"
+"Language-Team: WireCore GmbH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-14T04:40:50+00:00\n"
+"PO-Revision-Date: 2026-10-14 00:00+0000\n"
+"Language: de_DE_formal\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wirecore-disable-rest\n"
+
+#. Plugin Name of the plugin
+#: wirecore-disable-rest.php
+msgid "WireCore Disable REST"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: wirecore-disable-rest.php
+msgid "https://wirecore.net"
+msgstr ""
+
+#. Description of the plugin
+#: wirecore-disable-rest.php
+msgid "Disables the WordPress REST API selectively – globally, per namespace or per route, including routes of other plugins."
+msgstr "Sperrt die WordPress REST API gezielt – global, pro Namespace oder pro Route, auch für Routen anderer Plugins."
+
+#. Author of the plugin
+#: wirecore-disable-rest.php
+msgid "WireCore GmbH"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:54
+#: includes/class-wirecore-dr-admin.php:316
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/class-wirecore-dr-admin.php:80
+#: includes/class-wirecore-dr-admin.php:413
+#: includes/class-wirecore-dr-admin.php:471
+#: includes/class-wirecore-dr-admin.php:764
+#: includes/class-wirecore-dr-admin.php:786
+#: includes/class-wirecore-dr-admin.php:842
+msgid "Read"
+msgstr "Lesen"
+
+#: includes/class-wirecore-dr-admin.php:81
+#: includes/class-wirecore-dr-admin.php:413
+#: includes/class-wirecore-dr-admin.php:478
+#: includes/class-wirecore-dr-admin.php:771
+#: includes/class-wirecore-dr-admin.php:787
+#: includes/class-wirecore-dr-admin.php:843
+msgid "Write"
+msgstr "Schreiben"
+
+#: includes/class-wirecore-dr-admin.php:82
+msgid "automatic"
+msgstr "automatisch"
+
+#: includes/class-wirecore-dr-admin.php:83
+#: includes/class-wirecore-dr-admin.php:741
+msgid "(no namespace)"
+msgstr "(ohne Namespace)"
+
+#: includes/class-wirecore-dr-admin.php:87
+msgid "IPs allowed"
+msgstr "IP frei"
+
+#: includes/class-wirecore-dr-admin.php:88
+msgid "Users allowed"
+msgstr "Benutzer frei"
+
+#: includes/class-wirecore-dr-admin.php:89
+msgid "Roles allowed"
+msgstr "Rollen frei"
+
+#: includes/class-wirecore-dr-admin.php:90
+msgid "IPs denied"
+msgstr "IP gesperrt"
+
+#: includes/class-wirecore-dr-admin.php:91
+msgid "Roles denied"
+msgstr "Rollen gesperrt"
+
+#: includes/class-wirecore-dr-admin.php:92
+msgid "Allowed"
+msgstr "Freigaben"
+
+#: includes/class-wirecore-dr-admin.php:93
+msgid "Denied"
+msgstr "Sperren"
+
+#: includes/class-wirecore-dr-admin.php:95
+#: includes/class-wirecore-dr-admin.php:728
+msgid "Expand all"
+msgstr "Alle aufklappen"
+
+#: includes/class-wirecore-dr-admin.php:96
+msgid "Collapse all"
+msgstr "Alle zuklappen"
+
+#: includes/class-wirecore-dr-admin.php:103
+msgid "The routes could not be loaded via the REST API:"
+msgstr "Die Routen konnten nicht über die REST API geladen werden:"
+
+#: includes/class-wirecore-dr-admin.php:155
+msgid "WooCommerce Store API (cart, checkout)"
+msgstr "WooCommerce Store API (Warenkorb, Kasse)"
+
+#: includes/class-wirecore-dr-admin.php:159
+msgid "oEmbed (embedding posts on other sites)"
+msgstr "oEmbed (Einbetten von Beiträgen auf anderen Seiten)"
+
+#: includes/class-wirecore-dr-admin.php:163
+msgid "LiteSpeed Cache (QUIC.cloud)"
+msgstr "LiteSpeed Cache (QUIC.cloud)"
+
+#: includes/class-wirecore-dr-admin.php:269
+msgid "Insufficient permissions."
+msgstr "Keine Berechtigung."
+
+#: includes/class-wirecore-dr-admin.php:315
+#: includes/class-wirecore-dr-admin.php:511
+msgid "Routes"
+msgstr "Routen"
+
+#: includes/class-wirecore-dr-admin.php:317
+#: includes/class-wirecore-dr-admin.php:1063
+msgid "Log"
+msgstr "Log"
+
+#: includes/class-wirecore-dr-admin.php:318
+msgid "Tools"
+msgstr "Werkzeuge"
+
+#: includes/class-wirecore-dr-admin.php:331
+msgid "Settings saved."
+msgstr "Die Einstellungen wurden gespeichert."
+
+#: includes/class-wirecore-dr-admin.php:334
+msgid "Saved. Invalid IP entries were discarded."
+msgstr "Gespeichert. Ungültige IP-Angaben wurden verworfen."
+
+#: includes/class-wirecore-dr-admin.php:338
+msgid "The rules could not be read. JavaScript is required to save them."
+msgstr "Die Regeln konnten nicht gelesen werden. Zum Speichern wird JavaScript benötigt."
+
+#: includes/class-wirecore-dr-admin.php:345
+msgid "The log has been cleared."
+msgstr "Das Log wurde geleert."
+
+#: includes/class-wirecore-dr-admin.php:347
+msgid "Settings imported."
+msgstr "Die Einstellungen wurden importiert."
+
+#: includes/class-wirecore-dr-admin.php:350
+msgid "Import failed. Please choose an export file of this plugin."
+msgstr "Der Import ist fehlgeschlagen. Bitte eine Exportdatei dieses Plugins wählen."
+
+#: includes/class-wirecore-dr-admin.php:362
+msgid "WIRECORE_DR_OFF is set in wp-config.php: no rules are enforced."
+msgstr "WIRECORE_DR_OFF ist in der wp-config.php gesetzt: Es werden keine Regeln durchgesetzt."
+
+#: includes/class-wirecore-dr-admin.php:465
+msgid "Default rule"
+msgstr "Standardregel"
+
+#: includes/class-wirecore-dr-admin.php:466
+msgid "Applies to all routes without a custom rule. “Read” covers GET/HEAD, “Write” covers POST/PUT/PATCH/DELETE. The most specific rule wins: route before namespace before automatic allowance before default."
+msgstr "Gilt für alle Routen ohne eigene Regel. „Lesen“ umfasst GET/HEAD, „Schreiben“ POST/PUT/PATCH/DELETE. Die spezifischste Regel gewinnt: Route vor Namespace vor automatischer Freigabe vor Standard."
+
+#: includes/class-wirecore-dr-admin.php:487
+msgid "Quick actions"
+msgstr "Schnellaktionen"
+
+#: includes/class-wirecore-dr-admin.php:489
+msgid "Block everything for guests"
+msgstr "Alles für Gäste sperren"
+
+#: includes/class-wirecore-dr-admin.php:493
+msgid "Block everything"
+msgstr "Alles sperren"
+
+#: includes/class-wirecore-dr-admin.php:497
+msgid "User list (/wp/v2/users) for admins only"
+msgstr "Benutzerliste (/wp/v2/users) nur für Admins"
+
+#: includes/class-wirecore-dr-admin.php:501
+msgid "Reset custom rules"
+msgstr "Eigene Regeln zurücksetzen"
+
+#: includes/class-wirecore-dr-admin.php:505
+msgid "Changes take effect only after saving."
+msgstr "Änderungen werden erst beim Speichern übernommen."
+
+#: includes/class-wirecore-dr-admin.php:512
+msgid "Use “Advanced” to additionally allow or deny IP addresses, roles and users for a namespace or route. The entries of a namespace apply to all of its routes."
+msgstr "Über „Erweitert“ lassen sich für einen Namespace oder eine Route zusätzlich IP-Adressen, Rollen und Benutzer freigeben oder sperren. Die Einträge eines Namespace gelten für alle seine Routen."
+
+#: includes/class-wirecore-dr-admin.php:517
+msgid "Loading routes …"
+msgstr "Routen werden geladen …"
+
+#: includes/class-wirecore-dr-admin.php:524
+msgid "Save rules"
+msgstr "Regeln speichern"
+
+#: includes/class-wirecore-dr-admin.php:544
+msgid "Advanced:"
+msgstr "Erweitert:"
+
+#: includes/class-wirecore-dr-admin.php:548
+msgid "Applies to reading and writing. Denials take precedence over allowances and also apply to administrators. Allowances grant access regardless of the rule. For a route, the entries of its namespace apply as well."
+msgstr "Gilt für Lesen und Schreiben. Sperren gehen vor Freigaben und gelten auch für Administratoren. Freigaben öffnen den Zugriff unabhängig von der Regel. Bei einer Route gelten zusätzlich die Einträge ihres Namespace."
+
+#: includes/class-wirecore-dr-admin.php:554
+#: includes/class-wirecore-dr-admin.php:989
+msgid "Allow"
+msgstr "Freigeben"
+
+#: includes/class-wirecore-dr-admin.php:555
+#: includes/class-wirecore-dr-admin.php:574
+msgid "IP addresses / CIDR ranges"
+msgstr "IP-Adressen / CIDR-Bereiche"
+
+#: includes/class-wirecore-dr-admin.php:560
+msgid "User IDs"
+msgstr "Benutzer-IDs"
+
+#: includes/class-wirecore-dr-admin.php:565
+#: includes/class-wirecore-dr-admin.php:579
+msgid "Roles"
+msgstr "Rollen"
+
+#: includes/class-wirecore-dr-admin.php:573
+msgid "Deny"
+msgstr "Sperren"
+
+#: includes/class-wirecore-dr-admin.php:588
+msgid "Apply"
+msgstr "Übernehmen"
+
+#: includes/class-wirecore-dr-admin.php:592
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: includes/class-wirecore-dr-admin.php:596
+msgid "Changes are saved with “Save rules”."
+msgstr "Gespeichert wird mit „Regeln speichern“."
+
+#: includes/class-wirecore-dr-admin.php:615
+msgid "Advanced"
+msgstr "Erweitert"
+
+#. translators: 1: number of routes, 2: number of namespaces, 3: routes reachable for guests
+#: includes/class-wirecore-dr-admin.php:683
+#, php-format
+msgid "%1$d routes registered in %2$d namespaces, %3$d of them reachable for logged-out visitors (without whitelists)."
+msgstr "%1$d Routen in %2$d Namespaces registriert, davon %3$d für nicht angemeldete Besucher erreichbar (ohne Whitelists)."
+
+#: includes/class-wirecore-dr-admin.php:695
+msgid "Search route or namespace …"
+msgstr "Route oder Namespace suchen …"
+
+#: includes/class-wirecore-dr-admin.php:699
+#: includes/class-wirecore-dr-admin.php:785
+msgid "Source"
+msgstr "Quelle"
+
+#: includes/class-wirecore-dr-admin.php:703
+msgid "All sources"
+msgstr "Alle Quellen"
+
+#: includes/class-wirecore-dr-admin.php:710
+#: includes/class-wirecore-dr-admin.php:1203
+msgid "Status"
+msgstr "Status"
+
+#: includes/class-wirecore-dr-admin.php:714
+msgid "All routes"
+msgstr "Alle Routen"
+
+#: includes/class-wirecore-dr-admin.php:715
+msgid "With custom rule"
+msgstr "Mit eigener Regel"
+
+#: includes/class-wirecore-dr-admin.php:719
+msgid "Reachable for guests"
+msgstr "Für Gäste erreichbar"
+
+#: includes/class-wirecore-dr-admin.php:723
+msgid "Blocked for guests"
+msgstr "Für Gäste gesperrt"
+
+#. translators: %d: number of routes
+#: includes/class-wirecore-dr-admin.php:749
+#, php-format
+msgid "%d route"
+msgid_plural "%d routes"
+msgstr[0] "%d Route"
+msgstr[1] "%d Routen"
+
+#: includes/class-wirecore-dr-admin.php:754
+msgid "Automatically allowed"
+msgstr "Automatisch freigegeben"
+
+#: includes/class-wirecore-dr-admin.php:783
+#: includes/class-wirecore-dr-admin.php:1143
+msgid "Route"
+msgstr "Route"
+
+#: includes/class-wirecore-dr-admin.php:784
+msgid "Methods"
+msgstr "Methoden"
+
+#: includes/class-wirecore-dr-admin.php:788
+msgid "Effective"
+msgstr "Effektiv"
+
+#: includes/class-wirecore-dr-admin.php:830
+msgid "Rules without a registered route"
+msgstr "Nicht gefundene Regeln"
+
+#: includes/class-wirecore-dr-admin.php:834
+msgid "Rules for namespaces or routes that are currently not registered, e.g. because a plugin is deactivated. They are kept until they are set to “Inherit” and nothing is entered under “Advanced”."
+msgstr "Regeln für Namespaces oder Routen, die gerade nicht registriert sind, z. B. weil ein Plugin deaktiviert ist. Sie bleiben erhalten, bis sie auf „Erben“ stehen und unter „Erweitert“ nichts mehr eingetragen ist."
+
+#: includes/class-wirecore-dr-admin.php:841
+msgid "Namespace / route"
+msgstr "Namespace / Route"
+
+#: includes/class-wirecore-dr-admin.php:870
+msgid "Administrators"
+msgstr "Administratoren"
+
+#: includes/class-wirecore-dr-admin.php:871
+msgid "Never block administrators (recommended – the block editor needs the REST API)"
+msgstr "Administratoren nie sperren (empfohlen – der Block-Editor benötigt die REST API)"
+
+#: includes/class-wirecore-dr-admin.php:877
+msgid "HTTPS"
+msgstr "HTTPS"
+
+#: includes/class-wirecore-dr-admin.php:878
+msgid "Allow the REST API over HTTPS only"
+msgstr "REST API nur über HTTPS erlauben"
+
+#: includes/class-wirecore-dr-admin.php:881
+msgid "JSONP"
+msgstr "JSONP"
+
+#: includes/class-wirecore-dr-admin.php:882
+msgid "Disable JSONP responses (?_jsonp=)"
+msgstr "JSONP-Antworten (?_jsonp=) deaktivieren"
+
+#: includes/class-wirecore-dr-admin.php:885
+msgid "REST links"
+msgstr "REST-Links"
+
+#: includes/class-wirecore-dr-admin.php:886
+msgid "Remove REST links from HTTP headers, HTML head and RSD"
+msgstr "REST-Links aus HTTP-Header, HTML-Head und RSD entfernen"
+
+#: includes/class-wirecore-dr-admin.php:892
+msgid "Index"
+msgstr "Index"
+
+#: includes/class-wirecore-dr-admin.php:893
+msgid "Hide blocked routes and namespaces in the index (/wp-json/)"
+msgstr "Gesperrte Routen und Namespaces im Index (/wp-json/) ausblenden"
+
+#: includes/class-wirecore-dr-admin.php:906
+msgid "Access"
+msgstr "Zugriff"
+
+#: includes/class-wirecore-dr-admin.php:909
+msgid "Roles for “Logged-in only”"
+msgstr "Rollen für „Nur angemeldet“"
+
+#: includes/class-wirecore-dr-admin.php:923
+msgid "No selection = all logged-in users."
+msgstr "Keine Auswahl = alle angemeldeten Nutzer."
+
+#: includes/class-wirecore-dr-admin.php:930
+msgid "Allowed user IDs"
+msgstr "Freigegebene Benutzer-IDs"
+
+#: includes/class-wirecore-dr-admin.php:938
+msgid "These users are never blocked. One ID per line."
+msgstr "Diese Benutzer werden nie gesperrt. Eine ID pro Zeile."
+
+#: includes/class-wirecore-dr-admin.php:945
+msgid "Allowed IP addresses"
+msgstr "Freigegebene IP-Adressen"
+
+#. translators: %s: current IP address
+#: includes/class-wirecore-dr-admin.php:956
+#, php-format
+msgid "Applies to all routes. One IP or CIDR range per line, e.g. 203.0.113.5 or 10.0.0.0/8. Allowances for individual routes are available in the route list under “Advanced”. Your current IP: %s"
+msgstr "Gilt für alle Routen. Eine IP oder ein CIDR-Bereich pro Zeile, z. B. 203.0.113.5 oder 10.0.0.0/8. Freigaben für einzelne Routen gibt es in der Routenliste unter „Erweitert“. Ihre aktuelle IP: %s"
+
+#: includes/class-wirecore-dr-admin.php:966
+msgid "Blocked IP addresses"
+msgstr "Gesperrte IP-Adressen"
+
+#: includes/class-wirecore-dr-admin.php:974
+msgid "These IPs get no access to any route – not even as administrator or through an allowance. One IP or CIDR range per line."
+msgstr "Diese IPs erhalten für alle Routen keinen Zugriff – auch nicht als Administrator oder über eine Freigabe. Eine IP oder ein CIDR-Bereich pro Zeile."
+
+#: includes/class-wirecore-dr-admin.php:982
+msgid "Automatic allowances"
+msgstr "Automatische Freigaben"
+
+#: includes/class-wirecore-dr-admin.php:983
+msgid "These plugins need the REST API for visitors on the front end (forms, cart, statistics). Their namespaces are public as long as no custom rule is set for the namespace or the route in the route list. The setting has no effect for plugins that are not installed."
+msgstr "Diese Plugins brauchen die REST API für Besucher im Frontend (Formulare, Warenkorb, Statistik). Ihre Namespaces sind öffentlich, solange in der Routenliste keine eigene Regel für den Namespace oder die Route gesetzt ist. Für nicht installierte Plugins hat die Einstellung keine Wirkung."
+
+#: includes/class-wirecore-dr-admin.php:1008
+msgid "Error response"
+msgstr "Fehlerantwort"
+
+#: includes/class-wirecore-dr-admin.php:1011
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+#: includes/class-wirecore-dr-admin.php:1017
+#: includes/class-wirecore-dr-guard.php:148
+msgid "Access to the REST API is restricted."
+msgstr "Der Zugriff auf die REST API ist eingeschränkt."
+
+#: includes/class-wirecore-dr-admin.php:1023
+msgid "Status code"
+msgstr "Statuscode"
+
+#: includes/class-wirecore-dr-admin.php:1032
+msgid "401 – Unauthorized"
+msgstr "401 – Nicht authentifiziert"
+
+#: includes/class-wirecore-dr-admin.php:1036
+msgid "403 – Forbidden"
+msgstr "403 – Verboten"
+
+#: includes/class-wirecore-dr-admin.php:1040
+msgid "404 – Not found (route appears not to exist)"
+msgstr "404 – Nicht gefunden (Route wirkt nicht vorhanden)"
+
+#: includes/class-wirecore-dr-admin.php:1049
+msgid "Hardening"
+msgstr "Härtung"
+
+#: includes/class-wirecore-dr-admin.php:1066
+msgid "Logging"
+msgstr "Protokoll"
+
+#. translators: %d: number of log entries
+#: includes/class-wirecore-dr-admin.php:1072
+#, php-format
+msgid "Log blocked requests (last %d)"
+msgstr "Blockierte Requests protokollieren (letzte %d)"
+
+#: includes/class-wirecore-dr-admin.php:1078
+msgid "IP address in log"
+msgstr "IP-Adresse im Log"
+
+#: includes/class-wirecore-dr-admin.php:1087
+msgid "Store in full"
+msgstr "Vollständig speichern"
+
+#: includes/class-wirecore-dr-admin.php:1091
+msgid "Store shortened (e.g. 203.0.113.0)"
+msgstr "Gekürzt speichern (z. B. 203.0.113.0)"
+
+#: includes/class-wirecore-dr-admin.php:1098
+msgid "Do not store"
+msgstr "Nicht speichern"
+
+#: includes/class-wirecore-dr-admin.php:1100
+msgid "Applies to new entries. Existing entries remain unchanged until the log is cleared."
+msgstr "Gilt für neue Einträge. Bereits gespeicherte Einträge bleiben unverändert, bis das Log geleert wird."
+
+#: includes/class-wirecore-dr-admin.php:1117
+msgid "No HTTPS"
+msgstr "Kein HTTPS"
+
+#: includes/class-wirecore-dr-admin.php:1118
+msgid "Deny list"
+msgstr "Sperrliste"
+
+#: includes/class-wirecore-dr-admin.php:1123
+msgid "The log is disabled. It can be enabled under “Settings”."
+msgstr "Das Log ist deaktiviert. Es lässt sich unter „Einstellungen“ einschalten."
+
+#. translators: %d: number of blocked requests
+#: includes/class-wirecore-dr-admin.php:1133
+#, php-format
+msgid "Blocked requests in total: %d"
+msgstr "Blockierte Requests insgesamt: %d"
+
+#: includes/class-wirecore-dr-admin.php:1141
+msgid "Time"
+msgstr "Zeit"
+
+#: includes/class-wirecore-dr-admin.php:1142
+msgid "Method"
+msgstr "Methode"
+
+#: includes/class-wirecore-dr-admin.php:1144
+msgid "IP"
+msgstr "IP"
+
+#: includes/class-wirecore-dr-admin.php:1145
+msgid "User ID"
+msgstr "Benutzer-ID"
+
+#: includes/class-wirecore-dr-admin.php:1146
+msgid "Rule"
+msgstr "Regel"
+
+#: includes/class-wirecore-dr-admin.php:1151
+msgid "No entries."
+msgstr "Keine Einträge."
+
+#: includes/class-wirecore-dr-admin.php:1174
+msgid "Clear log"
+msgstr "Log leeren"
+
+#: includes/class-wirecore-dr-admin.php:1187
+msgid "Self-test"
+msgstr "Selbsttest"
+
+#: includes/class-wirecore-dr-admin.php:1188
+msgid "Calls the REST API without authentication and shows what logged-out visitors see."
+msgstr "Ruft die REST API ohne Anmeldung auf und zeigt, was nicht angemeldete Besucher sehen."
+
+#: includes/class-wirecore-dr-admin.php:1197
+msgid "Run test"
+msgstr "Test starten"
+
+#: includes/class-wirecore-dr-admin.php:1202
+msgid "URL"
+msgstr "URL"
+
+#: includes/class-wirecore-dr-admin.php:1204
+msgid "Response"
+msgstr "Antwort"
+
+#: includes/class-wirecore-dr-admin.php:1234
+msgid "Export"
+msgstr "Export"
+
+#: includes/class-wirecore-dr-admin.php:1241
+msgid "Export settings"
+msgstr "Einstellungen exportieren"
+
+#: includes/class-wirecore-dr-admin.php:1248
+msgid "Import"
+msgstr "Import"
+
+#: includes/class-wirecore-dr-admin.php:1249
+msgid "Replaces all current settings with those from the file."
+msgstr "Ersetzt alle aktuellen Einstellungen durch die der Datei."
+
+#: includes/class-wirecore-dr-admin.php:1260
+msgid "Import settings"
+msgstr "Einstellungen importieren"
+
+#: includes/class-wirecore-dr-admin.php:1267
+msgid "Emergency switch"
+msgstr "Notausschalter"
+
+#: includes/class-wirecore-dr-admin.php:1268
+msgid "If a rule locks you out of the admin area, this line in wp-config.php disables all rules:"
+msgstr "Sperrt eine Regel den Zugang zum Admin-Bereich aus, setzt diese Zeile in der wp-config.php alle Regeln außer Kraft:"
+
+#: includes/class-wirecore-dr-admin.php:1274
+msgid "For developers"
+msgstr "Für Entwickler"
+
+#: includes/class-wirecore-dr-admin.php:1277
+msgid "<code>wirecore_dr_error</code> – filters the WP_Error of a blocked request (parameters: error, route pattern, method). If the filter returns <code>true</code>, the request is allowed after all."
+msgstr "<code>wirecore_dr_error</code> – Filter für den WP_Error einer gesperrten Anfrage (Parameter: Fehler, Routen-Muster, Methode). Gibt der Filter <code>true</code> zurück, wird die Anfrage doch zugelassen."
+
+#: includes/class-wirecore-dr-admin.php:1284
+msgid "<code>wirecore_dr_client_ip</code> – filters the client IP, e.g. behind a proxy."
+msgstr "<code>wirecore_dr_client_ip</code> – Filter für die Client-IP, z. B. hinter einem Proxy."
+
+#: includes/class-wirecore-dr-admin.php:1291
+msgid "<code>wirecore_dr_known_namespaces</code> – filters the plugins under “Automatic allowances” (array <code>key =&gt; [namespaces]</code>). New entries appear there as a checkbox and can be enabled."
+msgstr "<code>wirecore_dr_known_namespaces</code> – Filter für die Plugins unter „Automatische Freigaben“ (Array <code>Schlüssel =&gt; [Namespaces]</code>). Neue Einträge erscheinen dort als Checkbox und lassen sich aktivieren."
+
+#: includes/class-wirecore-dr-admin.php:1298
+msgid "WP-CLI: <code>wp wirecore-dr</code> (status, routes, set, default, export, import, log)."
+msgstr "WP-CLI: <code>wp wirecore-dr</code> (status, routes, set, default, export, import, log)."
+
+#: includes/class-wirecore-dr-guard.php:106
+msgid "The REST API is only available over HTTPS."
+msgstr "Die REST API ist nur über HTTPS erreichbar."
+
+#: includes/class-wirecore-dr-routes.php:46
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: includes/class-wirecore-dr-routes.php:141
+#, php-format
+msgid "%s (plugin)"
+msgstr "%s (Plugin)"
+
+#. translators: %s: file or folder name of the must-use plugin
+#: includes/class-wirecore-dr-routes.php:150
+#, php-format
+msgid "%s (must-use plugin)"
+msgstr "%s (MU-Plugin)"
+
+#: includes/class-wirecore-dr-routes.php:159
+#, php-format
+msgid "%s (theme)"
+msgstr "%s (Theme)"
+
+#: includes/class-wirecore-dr-settings.php:119
+msgid "Inherit"
+msgstr "Erben"
+
+#: includes/class-wirecore-dr-settings.php:120
+msgid "Public"
+msgstr "Öffentlich"
+
+#: includes/class-wirecore-dr-settings.php:121
+msgid "Logged-in only"
+msgstr "Nur angemeldet"
+
+#: includes/class-wirecore-dr-settings.php:122
+msgid "Admins only"
+msgstr "Nur Admins"
+
+#: includes/class-wirecore-dr-settings.php:123
+msgid "Blocked"
+msgstr "Gesperrt"
+
+#: includes/class-wirecore-dr-settings.php:329
+msgid "The file is not a valid export of this plugin."
+msgstr "Die Datei ist kein gültiger Export dieses Plugins."
+
+#: includes/class-wirecore-dr-admin.php:36
+#: includes/class-wirecore-dr-admin.php:37
+msgid "REST API"
+msgstr "REST API"

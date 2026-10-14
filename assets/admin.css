@@ -1,0 +1,176 @@
+.wirecore-dr .wirecore-dr-status {
+	margin: 16px 0;
+	padding: 8px 12px;
+	background: #fff;
+	border-left: 4px solid #2271b1;
+}
+
+.wirecore-dr .wirecore-dr-default label {
+	margin-right: 16px;
+}
+
+.wirecore-dr .wirecore-dr-presets .button {
+	margin-right: 4px;
+}
+
+.wirecore-dr .wirecore-dr-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.wirecore-dr .wirecore-dr-toolbar input[type='search'] {
+	min-width: 280px;
+}
+
+.wirecore-dr .wirecore-dr-namespace {
+	margin-bottom: 8px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+}
+
+.wirecore-dr .wirecore-dr-namespace-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+	padding: 6px 10px;
+}
+
+.wirecore-dr .wirecore-dr-toggle {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 0;
+	background: none;
+	border: 0;
+	cursor: pointer;
+}
+
+.wirecore-dr .wirecore-dr-toggle .dashicons {
+	transition: transform 0.15s;
+}
+
+.wirecore-dr .wirecore-dr-toggle[aria-expanded='true'] .dashicons {
+	transform: rotate(90deg);
+}
+
+.wirecore-dr .wirecore-dr-meta {
+	color: #646970;
+}
+
+.wirecore-dr .wirecore-dr-selects {
+	margin-left: auto;
+}
+
+.wirecore-dr .wirecore-dr-routes {
+	border-width: 1px 0 0;
+}
+
+.wirecore-dr .wirecore-dr-routes code {
+	word-break: break-all;
+}
+
+.wirecore-dr .wirecore-dr-badge {
+	display: inline-block;
+	margin: 2px 4px 2px 0;
+	padding: 1px 6px;
+	border-radius: 3px;
+	font-size: 12px;
+	white-space: nowrap;
+	background: #f0f0f1;
+}
+
+.wirecore-dr .wirecore-dr-badge-public {
+	background: #edfaef;
+	color: #00631a;
+}
+
+.wirecore-dr .wirecore-dr-badge-auth,
+.wirecore-dr .wirecore-dr-badge-admin {
+	background: #fcf9e8;
+	color: #8a6d00;
+}
+
+.wirecore-dr .wirecore-dr-badge-blocked {
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+.wirecore-dr .wirecore-dr-orphans {
+	margin-top: 8px;
+}
+
+.wirecore-dr .wirecore-dr-spinner {
+	float: none;
+	margin: 0 6px 0 0;
+}
+
+.wirecore-dr .wirecore-dr-selects label {
+	margin-left: 8px;
+}
+
+.wirecore-dr .wirecore-dr-badge-ip {
+	background: #f0f6fc;
+	color: #0a4b78;
+}
+
+.wirecore-dr .wirecore-dr-advanced-wrap {
+	margin-left: 8px;
+}
+
+.wirecore-dr .wirecore-dr-access-summary .wirecore-dr-badge {
+	margin-left: 4px;
+}
+
+.wirecore-dr .wirecore-dr-dialog {
+	width: min(760px, 90vw);
+	padding: 16px 24px;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.wirecore-dr .wirecore-dr-dialog::backdrop {
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.wirecore-dr .wirecore-dr-dialog h2 {
+	margin-top: 0;
+}
+
+.wirecore-dr .wirecore-dr-dialog-columns {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.wirecore-dr .wirecore-dr-dialog fieldset {
+	padding: 8px 12px;
+	border: 1px solid #dcdcde;
+}
+
+.wirecore-dr .wirecore-dr-dialog legend {
+	padding: 0 4px;
+	font-weight: 600;
+}
+
+.wirecore-dr .wirecore-dr-dialog textarea,
+.wirecore-dr .wirecore-dr-dialog input[type='text'] {
+	display: block;
+	width: 100%;
+	margin: 4px 0 12px;
+}
+
+.wirecore-dr .wirecore-dr-dialog-label {
+	margin: 0 0 4px;
+}
+
+.wirecore-dr .wirecore-dr-role {
+	display: block;
+	margin-bottom: 2px;
+}
+
+.wirecore-dr .wirecore-dr-dialog-actions {
+	margin-bottom: 0;
+}
