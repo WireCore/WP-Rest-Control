@@ -107,6 +107,29 @@ docker compose exec wordpress wp --allow-root i18n make-php $P/languages
 
 Only the files needed by the plugin are shipped. Development files are excluded via [`.distignore`](.distignore) and mirrored in [`.gitattributes`](.gitattributes) – add new development files to both.
 
+### Continuous integration
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every push to `main` and on pull requests:
+
+- PHP syntax check on PHP 7.4 – 8.4
+- PHP compatibility for the minimum PHP version (`composer phpcs`, see [`phpcs.xml.dist`](phpcs.xml.dist))
+- Prettier (`npm run format:check`)
+- Plugin Check on the built package, warnings included
+
+## Releasing
+
+1. Bump `Version:` in `wirecore-disable-rest.php` and `Stable tag:` in `readme.txt`, and add the changelog entry to `readme.txt` and `CHANGELOG.md`.
+2. Commit and push to `main`, wait for CI to pass.
+3. Create and push a tag with the version number, without a `v` prefix:
+
+    ```bash
+    git tag 1.0.1 && git push origin 1.0.1
+    ```
+
+[`.github/workflows/release.yml`](.github/workflows/release.yml) then checks that tag, plugin header and stable tag match, deploys the package (files selected by `.distignore`, assets from `.wordpress-org/`) to the wordpress.org SVN repository and creates a GitHub release with the ZIP.
+
+One-time setup: add the secrets `SVN_USERNAME` and `SVN_PASSWORD` (the SVN password from the wordpress.org profile under _Account & Security_) to the GitHub environment `wordpress.org`. The very first version is submitted manually at [wordpress.org/plugins/developers/add](https://wordpress.org/plugins/developers/add/); the workflow takes over once the plugin has been approved.
+
 ## License
 
 [GPL-2.0-or-later](LICENSE) © WireCore GmbH

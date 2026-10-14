@@ -40,6 +40,10 @@ docker compose exec wordpress wp --allow-root i18n make-php $P/languages
 
 Only `wirecore-disable-rest.php`, `uninstall.php`, `index.php`, `readme.txt`, `LICENSE`, `includes/`, `assets/` and `languages/` are shipped. New development or configuration files must be added to both `.distignore` and `.gitattributes` (`export-ignore`).
 
+## Checks
+
+CI (`.github/workflows/ci.yml`) must stay green: PHP lint 7.4–8.4, `composer phpcs` (PHPCompatibilityWP, `phpcs.xml.dist`), `npm run format:check`, Plugin Check in strict mode on the package built from `.distignore`.
+
 ## Release
 
-Bump `Version:` in `wirecore-disable-rest.php` and `Stable tag:` in `readme.txt` together, and add the entry to the changelog in `readme.txt` and `CHANGELOG.md`.
+Bump `Version:` in `wirecore-disable-rest.php` and `Stable tag:` in `readme.txt` together, and add the entry to the changelog in `readme.txt` and `CHANGELOG.md`. Pushing a tag like `1.0.1` (no `v`) runs `.github/workflows/release.yml`, which verifies the version numbers and deploys to the wordpress.org SVN repository.

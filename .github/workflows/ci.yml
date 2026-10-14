@@ -1,0 +1,78 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    php-lint:
+        name: PHP ${{ matrix.php }} syntax
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
+                  tools: none
+            - name: Lint PHP files
+              run: |
+                  find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 \
+                    | xargs -0 -n1 php -l
+
+    php-compatibility:
+        name: PHP compatibility
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.3'
+                  coverage: none
+                  tools: composer
+            - name: Install dependencies
+              run: composer install --no-interaction --no-progress
+            - name: Run PHPCS (PHPCompatibilityWP)
+              run: composer phpcs
+
+    format:
+        name: Prettier
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+            - run: npm ci
+            - run: npm run format:check
+
+    plugin-check:
+        name: Plugin Check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build plugin package
+              # Same file selection as the wordpress.org deployment (.distignore).
+              run: |
+                  mkdir -p build/wirecore-disable-rest
+                  rsync -a --exclude-from=.distignore ./ build/wirecore-disable-rest/ --exclude=/build
+            - uses: wordpress/plugin-check-action@v1
+              with:
+                  build-dir: build/wirecore-disable-rest
+                  slug: wirecore-disable-rest
+                  include-experimental: true
+                  # Warnings fail the build as well – the plugin is free of both.
+                  strict: true

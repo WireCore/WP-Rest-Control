@@ -1,0 +1,55 @@
+name: Release
+
+# Publishes a version to wordpress.org when a tag like "1.0.1" (without "v")
+# is pushed, and attaches the plugin ZIP to a GitHub release.
+#
+# Requires the repository secrets SVN_USERNAME and SVN_PASSWORD (the SVN
+# password of the wordpress.org account, set under "Account & Security").
+
+on:
+    push:
+        tags:
+            - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        name: Deploy to wordpress.org
+        runs-on: ubuntu-latest
+        environment: wordpress.org
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Check version numbers
+              run: |
+                  tag="${GITHUB_REF_NAME}"
+                  header=$(sed -n 's/^Version: *//p' wirecore-disable-rest.php | tr -d '\r')
+                  stable=$(sed -n 's/^Stable tag: *//p' readme.txt | tr -d '\r')
+                  echo "Tag: $tag, plugin header: $header, readme stable tag: $stable"
+                  if [ "$tag" != "$header" ] || [ "$tag" != "$stable" ]; then
+                    echo "::error::Tag, plugin header Version and readme.txt Stable tag must be identical."
+                    exit 1
+                  fi
+                  if ! grep -q "^= $tag =" readme.txt; then
+                    echo "::error::readme.txt has no changelog entry for $tag."
+                    exit 1
+                  fi
+
+            - name: Deploy to wordpress.org
+              id: deploy
+              uses: 10up/action-wordpress-plugin-deploy@stable
+              with:
+                  generate-zip: true
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  SLUG: wirecore-disable-rest
+                  ASSETS_DIR: .wordpress-org
+
+            - name: Create GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: ${{ steps.deploy.outputs.zip-path }}
+                  generate_release_notes: true
