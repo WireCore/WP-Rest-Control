@@ -101,8 +101,13 @@ class WireCore_DR_Admin
 			],
 			'expand' => __('Expand all', 'wirecore-disable-rest'),
 			'collapse' => __('Collapse all', 'wirecore-disable-rest'),
+			// _locale=user: the route list in the language of the admin, not of the site
 			'url' => add_query_arg(
-				[self::ROUTES_PARAM => 1, '_fields' => self::ROUTES_PARAM],
+				[
+					self::ROUTES_PARAM => 1,
+					'_fields' => self::ROUTES_PARAM,
+					'_locale' => 'user',
+				],
 				rest_url()
 			),
 			'field' => self::ROUTES_PARAM,

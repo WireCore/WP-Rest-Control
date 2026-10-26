@@ -356,7 +356,8 @@
 
 	fetch(i18n.url, {
 		credentials: 'same-origin',
-		headers: { 'X-WP-Nonce': i18n.nonce },
+		// Accept: application/json, otherwise WordPress ignores _locale=user
+		headers: { 'X-WP-Nonce': i18n.nonce, Accept: 'application/json' },
 	})
 		.then(function (response) {
 			return response.json().then(function (data) {
