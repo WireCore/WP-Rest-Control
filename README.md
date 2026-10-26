@@ -64,12 +64,14 @@ Rules: `inherit`, `public`, `auth`, `admin`, `blocked` (`inherit` is not allowed
 
 ## Development
 
-Requirements: Docker, Node.js (for Prettier).
+Requirements: Docker, Node.js (for Prettier and the WireLayer CSS).
 
 ```bash
 docker compose up -d   # WordPress on http://localhost:8092, phpMyAdmin on :8093
-npm install            # Prettier with the PHP plugin
+npm install            # Prettier with the PHP plugin, @wirecore/wirelayer-css
 ```
+
+The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) components (`.wc-*` classes). `npm run build:css` writes the components listed in `package.json`, scoped to `#wirecore-dr`, with their fonts to `assets/wirelayer/`. The output is committed, so the plugin needs no build step; run the command again after adding a component or updating `@wirecore/wirelayer-css`.
 
 WP-CLI is available in the container:
 

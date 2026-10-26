@@ -77,6 +77,14 @@ Settings are stored per site, because every site has its own routes and plugins.
 
 The plugin does not send any data to external services and does not set cookies. If you enable the log, it stores the method, route, IP address (in full, shortened or not at all – configurable), user ID and the reason of blocked requests in the database of your site. The self-test sends requests from your server to its own REST API.
 
+= Source code and third-party resources =
+
+The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) component library (MIT). `assets/wirelayer/wirelayer.css` is generated from the npm package `@wirecore/wirelayer-css` with `npm run build:css`; the source code of the plugin, including `package.json`, is available at [github.com/WireCore/WireCore-Disable-REST](https://github.com/WireCore/WireCore-Disable-REST). Bundled with it:
+
+* Tailwind CSS (MIT) – preflight and utilities compiled into `wirelayer.css`
+* Schibsted Grotesk and JetBrains Mono fonts (SIL Open Font License 1.1, `assets/wirelayer/fonts/OFL.txt`), served from the plugin – no external font service
+* Lucide icons (ISC)
+
 == Installation ==
 
 1. Install the plugin via *Plugins → Add New* or upload the plugin folder to `/wp-content/plugins/`.

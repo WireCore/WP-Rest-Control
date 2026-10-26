@@ -6,7 +6,8 @@ WordPress plugin, published on wordpress.org (slug `wirecore-disable-rest`) and 
 
 - Static classes `WireCore_DR_*` in `includes/class-wirecore-dr-*.php`, no autoloader, no namespaces. Each class has an `init()` that registers its hooks.
 - Prefix everything global: functions/options/hooks/nonces `wirecore_dr_`, constants `WIRECORE_DR_`, CSS classes/IDs `wirecore-dr-`, text domain `wirecore-disable-rest`, WP-CLI command `wp wirecore-dr`.
-- Admin pages in plain PHP with `admin-post.php` forms, nonces, `wp_safe_redirect()` plus a notice query arg. No build step for JS/CSS.
+- Admin pages in plain PHP with `admin-post.php` forms, nonces, `wp_safe_redirect()` plus a notice query arg. No build step for JS; the only CSS build is `npm run build:css` (below).
+- UI in the WireLayer corporate design: the markup uses the `.wc-*` classes of `@wirecore/wirelayer-css` (class reference: `node_modules/@wirecore/wirelayer-css/llms-full.txt`). `npm run build:css` writes the used components, scoped to `#wirecore-dr`, to `assets/wirelayer/` – committed, CI checks it is up to date. Add a component to the list in `package.json` before using its classes, and run the command again after updating the package. `wirecore-dr-*` classes are hooks for `admin.js` and page layout in `assets/admin.css` (scoped to `#wirecore-dr`, colors and spacing from WireLayer variables). Icons are inline Lucide SVGs (`WireCore_DR_Admin::icon()`).
 - Minimum versions: WordPress 5.8, PHP 7.4 (verified with PHPCompatibility and a WP 5.8/PHP 7.4 instance) – do not use newer functions without raising them.
 - Formatting with Prettier (tabs, single quotes). Plugin Check must stay free of errors and warnings; justified exceptions are marked with `phpcs:ignore`/`phpcs:disable` plus a comment explaining why.
 
@@ -42,7 +43,7 @@ Only `wirecore-disable-rest.php`, `uninstall.php`, `index.php`, `readme.txt`, `L
 
 ## Checks
 
-CI (`.github/workflows/ci.yml`) must stay green: PHP lint 7.4–8.4, `composer phpcs` (PHPCompatibilityWP, `phpcs.xml.dist`), PHPUnit on PHP 7.4 and 8.3, `npm run format:check`, Plugin Check in strict mode on the package built from `.distignore`.
+CI (`.github/workflows/ci.yml`) must stay green: PHP lint 7.4–8.4, `composer phpcs` (PHPCompatibilityWP, `phpcs.xml.dist`), PHPUnit on PHP 7.4 and 8.3, `npm run format:check`, `assets/wirelayer/` up to date with `npm run build:css`, Plugin Check in strict mode on the package built from `.distignore`.
 
 Tests live in `tests/` (`test-*.php`, base class `WireCore_DR_TestCase`). They are integration tests against the WordPress test suite: dispatch requests through `rest_get_server()->dispatch()` (the bootstrap defines `REST_REQUEST`), and register fixture routes in `tests/bootstrap.php` – the route list is cached, so routes must exist before the first REST server is created. Run them inside the Docker container (see README) against the separate database `wordpress_test`.
 

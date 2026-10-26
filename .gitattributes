@@ -27,3 +27,4 @@
 # Consistent line endings
 * text=auto eol=lf
 *.mo binary
+*.woff2 binary
