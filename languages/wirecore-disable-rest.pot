@@ -1,15 +1,15 @@
 # Copyright (C) 2026 WireCore GmbH
-# This file is distributed under the same license as the WireCore Disable REST plugin.
+# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: WireCore Disable REST 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wirecore.net\n"
-"Last-Translator: WireCore GmbH\n"
-"Language-Team: WireCore GmbH\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wirecore-disable-rest\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-14T09:22:19+00:00\n"
+"POT-Creation-Date: 2026-10-26T04:32:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wirecore-disable-rest\n"
@@ -17,12 +17,6 @@ msgstr ""
 #. Plugin Name of the plugin
 #: wirecore-disable-rest.php
 msgid "WireCore Disable REST"
-msgstr ""
-
-#. Plugin URI of the plugin
-#. Author URI of the plugin
-#: wirecore-disable-rest.php
-msgid "https://wirecore.net"
 msgstr ""
 
 #. Description of the plugin
@@ -35,593 +29,607 @@ msgstr ""
 msgid "WireCore GmbH"
 msgstr ""
 
+#. Author URI of the plugin
+#: wirecore-disable-rest.php
+msgid "https://wirecore.net"
+msgstr ""
+
 #: includes/class-wirecore-dr-admin.php:36
 #: includes/class-wirecore-dr-admin.php:37
 msgid "REST API"
 msgstr ""
 
 #: includes/class-wirecore-dr-admin.php:54
-#: includes/class-wirecore-dr-admin.php:316
+#: includes/class-wirecore-dr-admin.php:344
 msgid "Settings"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:80
-#: includes/class-wirecore-dr-admin.php:413
-#: includes/class-wirecore-dr-admin.php:471
-#: includes/class-wirecore-dr-admin.php:764
-#: includes/class-wirecore-dr-admin.php:786
-#: includes/class-wirecore-dr-admin.php:842
+#: includes/class-wirecore-dr-admin.php:87
+#: includes/class-wirecore-dr-admin.php:578
+#: includes/class-wirecore-dr-admin.php:647
+#: includes/class-wirecore-dr-admin.php:1015
+#: includes/class-wirecore-dr-admin.php:1053
+#: includes/class-wirecore-dr-admin.php:1125
 msgid "Read"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:81
-#: includes/class-wirecore-dr-admin.php:413
-#: includes/class-wirecore-dr-admin.php:478
-#: includes/class-wirecore-dr-admin.php:771
-#: includes/class-wirecore-dr-admin.php:787
-#: includes/class-wirecore-dr-admin.php:843
+#: includes/class-wirecore-dr-admin.php:88
+#: includes/class-wirecore-dr-admin.php:579
+#: includes/class-wirecore-dr-admin.php:657
+#: includes/class-wirecore-dr-admin.php:1025
+#: includes/class-wirecore-dr-admin.php:1057
+#: includes/class-wirecore-dr-admin.php:1129
 msgid "Write"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:82
+#: includes/class-wirecore-dr-admin.php:89
 msgid "automatic"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:83
-#: includes/class-wirecore-dr-admin.php:741
+#: includes/class-wirecore-dr-admin.php:90
+#: includes/class-wirecore-dr-admin.php:987
 msgid "(no namespace)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:87
+#: includes/class-wirecore-dr-admin.php:94
 msgid "IPs allowed"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:88
+#: includes/class-wirecore-dr-admin.php:95
 msgid "Users allowed"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:89
+#: includes/class-wirecore-dr-admin.php:96
 msgid "Roles allowed"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:90
+#: includes/class-wirecore-dr-admin.php:97
 msgid "IPs denied"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:91
+#: includes/class-wirecore-dr-admin.php:98
 msgid "Roles denied"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:92
+#: includes/class-wirecore-dr-admin.php:99
 msgid "Allowed"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:93
+#: includes/class-wirecore-dr-admin.php:100
 msgid "Denied"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:95
-#: includes/class-wirecore-dr-admin.php:728
+#: includes/class-wirecore-dr-admin.php:102
+#: includes/class-wirecore-dr-admin.php:970
 msgid "Expand all"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:96
+#: includes/class-wirecore-dr-admin.php:103
 msgid "Collapse all"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:103
+#: includes/class-wirecore-dr-admin.php:110
 msgid "The routes could not be loaded via the REST API:"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:155
+#: includes/class-wirecore-dr-admin.php:167
 msgid "WooCommerce Store API (cart, checkout)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:159
+#: includes/class-wirecore-dr-admin.php:171
 msgid "oEmbed (embedding posts on other sites)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:163
+#: includes/class-wirecore-dr-admin.php:175
 msgid "LiteSpeed Cache (QUIC.cloud)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:269
+#: includes/class-wirecore-dr-admin.php:294
 msgid "Insufficient permissions."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:315
-#: includes/class-wirecore-dr-admin.php:511
+#: includes/class-wirecore-dr-admin.php:343
+#: includes/class-wirecore-dr-admin.php:697
 msgid "Routes"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:317
-#: includes/class-wirecore-dr-admin.php:1063
+#: includes/class-wirecore-dr-admin.php:345
+#: includes/class-wirecore-dr-admin.php:1373
+#: includes/class-wirecore-dr-admin.php:1452
 msgid "Log"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:318
+#: includes/class-wirecore-dr-admin.php:346
 msgid "Tools"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:331
+#: includes/class-wirecore-dr-admin.php:364
 msgid "Settings saved."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:334
+#: includes/class-wirecore-dr-admin.php:368
 msgid "Saved. Invalid IP entries were discarded."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:338
+#: includes/class-wirecore-dr-admin.php:375
 msgid "The rules could not be read. JavaScript is required to save them."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:345
+#: includes/class-wirecore-dr-admin.php:382
 msgid "The log has been cleared."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:347
+#: includes/class-wirecore-dr-admin.php:386
 msgid "Settings imported."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:350
+#: includes/class-wirecore-dr-admin.php:390
 msgid "Import failed. Please choose an export file of this plugin."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:362
+#: includes/class-wirecore-dr-admin.php:426
 msgid "WIRECORE_DR_OFF is set in wp-config.php: no rules are enforced."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:465
+#: includes/class-wirecore-dr-admin.php:640
 msgid "Default rule"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:466
+#: includes/class-wirecore-dr-admin.php:641
 msgid "Applies to all routes without a custom rule. “Read” covers GET/HEAD, “Write” covers POST/PUT/PATCH/DELETE. The most specific rule wins: route before namespace before automatic allowance before default."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:487
+#: includes/class-wirecore-dr-admin.php:672
 msgid "Quick actions"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:489
-msgid "Block everything for guests"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:493
-msgid "Block everything"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:497
-msgid "User list (/wp/v2/users) for admins only"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:501
-msgid "Reset custom rules"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:505
+#: includes/class-wirecore-dr-admin.php:673
 msgid "Changes take effect only after saving."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:512
+#: includes/class-wirecore-dr-admin.php:676
+msgid "Block everything for guests"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:680
+msgid "Block everything"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:684
+msgid "User list (/wp/v2/users) for admins only"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:688
+msgid "Reset custom rules"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:698
 msgid "Use “Advanced” to additionally allow or deny IP addresses, roles and users for a namespace or route. The entries of a namespace apply to all of its routes."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:517
+#: includes/class-wirecore-dr-admin.php:706
 msgid "Loading routes …"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:524
+#: includes/class-wirecore-dr-admin.php:715
 msgid "Save rules"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:544
+#: includes/class-wirecore-dr-admin.php:736
 msgid "Advanced:"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:548
+#: includes/class-wirecore-dr-admin.php:740
 msgid "Applies to reading and writing. Denials take precedence over allowances and also apply to administrators. Allowances grant access regardless of the rule. For a route, the entries of its namespace apply as well."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:554
-#: includes/class-wirecore-dr-admin.php:989
+#: includes/class-wirecore-dr-admin.php:746
+#: includes/class-wirecore-dr-admin.php:1290
 msgid "Allow"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:555
-#: includes/class-wirecore-dr-admin.php:574
+#: includes/class-wirecore-dr-admin.php:751
+#: includes/class-wirecore-dr-admin.php:788
 msgid "IP addresses / CIDR ranges"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:560
+#: includes/class-wirecore-dr-admin.php:758
 msgid "User IDs"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:565
-#: includes/class-wirecore-dr-admin.php:579
+#: includes/class-wirecore-dr-admin.php:767
+#: includes/class-wirecore-dr-admin.php:795
 msgid "Roles"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:573
+#: includes/class-wirecore-dr-admin.php:783
 msgid "Deny"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:588
-msgid "Apply"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:592
-msgid "Cancel"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:596
+#: includes/class-wirecore-dr-admin.php:813
 msgid "Changes are saved with “Save rules”."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:615
+#: includes/class-wirecore-dr-admin.php:817
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:821
+msgid "Apply"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:841
 msgid "Advanced"
 msgstr ""
 
 #. translators: 1: number of routes, 2: number of namespaces, 3: routes reachable for guests
-#: includes/class-wirecore-dr-admin.php:683
+#: includes/class-wirecore-dr-admin.php:909
 #, php-format
 msgid "%1$d routes registered in %2$d namespaces, %3$d of them reachable for logged-out visitors (without whitelists)."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:695
+#: includes/class-wirecore-dr-admin.php:921
+#: includes/class-wirecore-dr-admin.php:924
 msgid "Search route or namespace …"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:699
-#: includes/class-wirecore-dr-admin.php:785
+#: includes/class-wirecore-dr-admin.php:930
+#: includes/class-wirecore-dr-admin.php:1049
 msgid "Source"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:703
+#: includes/class-wirecore-dr-admin.php:934
 msgid "All sources"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:710
-#: includes/class-wirecore-dr-admin.php:1203
+#: includes/class-wirecore-dr-admin.php:947
+#: includes/class-wirecore-dr-admin.php:1562
 msgid "Status"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:714
+#: includes/class-wirecore-dr-admin.php:951
 msgid "All routes"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:715
+#: includes/class-wirecore-dr-admin.php:955
 msgid "With custom rule"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:719
+#: includes/class-wirecore-dr-admin.php:959
 msgid "Reachable for guests"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:723
+#: includes/class-wirecore-dr-admin.php:963
 msgid "Blocked for guests"
 msgstr ""
 
 #. translators: %d: number of routes
-#: includes/class-wirecore-dr-admin.php:749
+#: includes/class-wirecore-dr-admin.php:995
 #, php-format
 msgid "%d route"
 msgid_plural "%d routes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wirecore-dr-admin.php:754
+#: includes/class-wirecore-dr-admin.php:1005
 msgid "Automatically allowed"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:783
-#: includes/class-wirecore-dr-admin.php:1143
+#: includes/class-wirecore-dr-admin.php:1041
+#: includes/class-wirecore-dr-admin.php:1471
 msgid "Route"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:784
+#: includes/class-wirecore-dr-admin.php:1045
 msgid "Methods"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:788
+#: includes/class-wirecore-dr-admin.php:1061
 msgid "Effective"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:830
+#: includes/class-wirecore-dr-admin.php:1111
 msgid "Rules without a registered route"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:834
+#: includes/class-wirecore-dr-admin.php:1112
 msgid "Rules for namespaces or routes that are currently not registered, e.g. because a plugin is deactivated. They are kept until they are set to “Inherit” and nothing is entered under “Advanced”."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:841
+#: includes/class-wirecore-dr-admin.php:1121
 msgid "Namespace / route"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:870
+#: includes/class-wirecore-dr-admin.php:1171
 msgid "Administrators"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:871
+#: includes/class-wirecore-dr-admin.php:1172
 msgid "Never block administrators (recommended – the block editor needs the REST API)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:877
+#: includes/class-wirecore-dr-admin.php:1178
 msgid "HTTPS"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:878
+#: includes/class-wirecore-dr-admin.php:1179
 msgid "Allow the REST API over HTTPS only"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:881
+#: includes/class-wirecore-dr-admin.php:1185
 msgid "JSONP"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:882
+#: includes/class-wirecore-dr-admin.php:1186
 msgid "Disable JSONP responses (?_jsonp=)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:885
+#: includes/class-wirecore-dr-admin.php:1192
 msgid "REST links"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:886
+#: includes/class-wirecore-dr-admin.php:1193
 msgid "Remove REST links from HTTP headers, HTML head and RSD"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:892
+#: includes/class-wirecore-dr-admin.php:1199
 msgid "Index"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:893
+#: includes/class-wirecore-dr-admin.php:1200
 msgid "Hide blocked routes and namespaces in the index (/wp-json/)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:906
+#: includes/class-wirecore-dr-admin.php:1214
 msgid "Access"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:909
+#: includes/class-wirecore-dr-admin.php:1216
 msgid "Roles for “Logged-in only”"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:923
+#: includes/class-wirecore-dr-admin.php:1229
 msgid "No selection = all logged-in users."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:930
+#: includes/class-wirecore-dr-admin.php:1235
 msgid "Allowed user IDs"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:938
+#: includes/class-wirecore-dr-admin.php:1242
 msgid "These users are never blocked. One ID per line."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:945
+#: includes/class-wirecore-dr-admin.php:1248
 msgid "Allowed IP addresses"
 msgstr ""
 
 #. translators: %s: current IP address
-#: includes/class-wirecore-dr-admin.php:956
+#: includes/class-wirecore-dr-admin.php:1258
 #, php-format
 msgid "Applies to all routes. One IP or CIDR range per line, e.g. 203.0.113.5 or 10.0.0.0/8. Allowances for individual routes are available in the route list under “Advanced”. Your current IP: %s"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:966
+#: includes/class-wirecore-dr-admin.php:1267
 msgid "Blocked IP addresses"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:974
+#: includes/class-wirecore-dr-admin.php:1274
 msgid "These IPs get no access to any route – not even as administrator or through an allowance. One IP or CIDR range per line."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:982
+#: includes/class-wirecore-dr-admin.php:1283
 msgid "Automatic allowances"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:983
+#: includes/class-wirecore-dr-admin.php:1284
 msgid "These plugins need the REST API for visitors on the front end (forms, cart, statistics). Their namespaces are public as long as no custom rule is set for the namespace or the route in the route list. The setting has no effect for plugins that are not installed."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1008
+#: includes/class-wirecore-dr-admin.php:1309
 msgid "Error response"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1011
+#: includes/class-wirecore-dr-admin.php:1311
 msgid "Error message"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1017
-#: includes/class-wirecore-dr-guard.php:148
+#: includes/class-wirecore-dr-admin.php:1318
+#: includes/class-wirecore-dr-guard.php:150
 msgid "Access to the REST API is restricted."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1023
+#: includes/class-wirecore-dr-admin.php:1325
 msgid "Status code"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1032
+#: includes/class-wirecore-dr-admin.php:1334
 msgid "401 – Unauthorized"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1036
+#: includes/class-wirecore-dr-admin.php:1341
 msgid "403 – Forbidden"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1040
+#: includes/class-wirecore-dr-admin.php:1348
 msgid "404 – Not found (route appears not to exist)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1049
+#: includes/class-wirecore-dr-admin.php:1359
 msgid "Hardening"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1066
-msgid "Logging"
-msgstr ""
-
 #. translators: %d: number of log entries
-#: includes/class-wirecore-dr-admin.php:1072
+#: includes/class-wirecore-dr-admin.php:1379
 #, php-format
 msgid "Log blocked requests (last %d)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1078
+#: includes/class-wirecore-dr-admin.php:1382
+msgid "Logging"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:1385
 msgid "IP address in log"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1087
+#: includes/class-wirecore-dr-admin.php:1394
 msgid "Store in full"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1091
+#: includes/class-wirecore-dr-admin.php:1401
 msgid "Store shortened (e.g. 203.0.113.0)"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1098
+#: includes/class-wirecore-dr-admin.php:1408
 msgid "Do not store"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1100
+#: includes/class-wirecore-dr-admin.php:1415
 msgid "Applies to new entries. Existing entries remain unchanged until the log is cleared."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1117
+#: includes/class-wirecore-dr-admin.php:1423
+msgid "Save settings"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:1436
 msgid "No HTTPS"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1118
+#: includes/class-wirecore-dr-admin.php:1437
 msgid "Deny list"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1123
+#: includes/class-wirecore-dr-admin.php:1443
 msgid "The log is disabled. It can be enabled under “Settings”."
 msgstr ""
 
 #. translators: %d: number of blocked requests
-#: includes/class-wirecore-dr-admin.php:1133
+#: includes/class-wirecore-dr-admin.php:1455
 #, php-format
 msgid "Blocked requests in total: %d"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1141
+#: includes/class-wirecore-dr-admin.php:1463
 msgid "Time"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1142
+#: includes/class-wirecore-dr-admin.php:1467
 msgid "Method"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1144
+#: includes/class-wirecore-dr-admin.php:1475
 msgid "IP"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1145
+#: includes/class-wirecore-dr-admin.php:1479
 msgid "User ID"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1146
+#: includes/class-wirecore-dr-admin.php:1483
 msgid "Rule"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1151
+#: includes/class-wirecore-dr-admin.php:1491
 msgid "No entries."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1174
+#: includes/class-wirecore-dr-admin.php:1524
 msgid "Clear log"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1187
+#: includes/class-wirecore-dr-admin.php:1547
 msgid "Self-test"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1188
+#: includes/class-wirecore-dr-admin.php:1548
 msgid "Calls the REST API without authentication and shows what logged-out visitors see."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1197
-msgid "Run test"
-msgstr ""
-
-#: includes/class-wirecore-dr-admin.php:1202
+#: includes/class-wirecore-dr-admin.php:1558
 msgid "URL"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1204
+#: includes/class-wirecore-dr-admin.php:1566
 msgid "Response"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1234
+#: includes/class-wirecore-dr-admin.php:1611
+msgid "Run test"
+msgstr ""
+
+#: includes/class-wirecore-dr-admin.php:1616
 msgid "Export"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1241
+#: includes/class-wirecore-dr-admin.php:1622
 msgid "Export settings"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1248
+#: includes/class-wirecore-dr-admin.php:1631
+#: includes/class-wirecore-dr-admin.php:1642
 msgid "Import"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1249
+#: includes/class-wirecore-dr-admin.php:1632
 msgid "Replaces all current settings with those from the file."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1260
+#: includes/class-wirecore-dr-admin.php:1646
 msgid "Import settings"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1267
+#: includes/class-wirecore-dr-admin.php:1655
 msgid "Emergency switch"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1268
+#: includes/class-wirecore-dr-admin.php:1656
 msgid "If a rule locks you out of the admin area, this line in wp-config.php disables all rules:"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1274
+#: includes/class-wirecore-dr-admin.php:1665
 msgid "For developers"
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1277
+#: includes/class-wirecore-dr-admin.php:1668
 msgid "<code>wirecore_dr_error</code> – filters the WP_Error of a blocked request (parameters: error, route pattern, method). If the filter returns <code>true</code>, the request is allowed after all."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1284
+#: includes/class-wirecore-dr-admin.php:1674
 msgid "<code>wirecore_dr_client_ip</code> – filters the client IP, e.g. behind a proxy."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1291
+#: includes/class-wirecore-dr-admin.php:1680
 msgid "<code>wirecore_dr_known_namespaces</code> – filters the plugins under “Automatic allowances” (array <code>key =&gt; [namespaces]</code>). New entries appear there as a checkbox and can be enabled."
 msgstr ""
 
-#: includes/class-wirecore-dr-admin.php:1298
+#: includes/class-wirecore-dr-admin.php:1686
 msgid "WP-CLI: <code>wp wirecore-dr</code> (status, routes, set, default, export, import, log)."
 msgstr ""
 
-#: includes/class-wirecore-dr-guard.php:106
+#: includes/class-wirecore-dr-guard.php:108
 msgid "The REST API is only available over HTTPS."
 msgstr ""
 
-#: includes/class-wirecore-dr-routes.php:46
+#: includes/class-wirecore-dr-routes.php:48
 msgid "Unknown"
 msgstr ""
 
-#: includes/class-wirecore-dr-routes.php:141
+#. translators: %s: plugin name
+#: includes/class-wirecore-dr-routes.php:143
 #, php-format
 msgid "%s (plugin)"
 msgstr ""
 
 #. translators: %s: file or folder name of the must-use plugin
-#: includes/class-wirecore-dr-routes.php:150
+#: includes/class-wirecore-dr-routes.php:153
 #, php-format
 msgid "%s (must-use plugin)"
 msgstr ""
 
-#: includes/class-wirecore-dr-routes.php:159
+#. translators: %s: theme name
+#: includes/class-wirecore-dr-routes.php:164
 #, php-format
 msgid "%s (theme)"
 msgstr ""

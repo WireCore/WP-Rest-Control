@@ -13,6 +13,13 @@
 	const dialog = document.getElementById('wirecore-dr-advanced');
 	const ALLOW = ['ip_allow', 'users_allow', 'roles_allow'];
 	const DENY = ['ip_deny', 'roles_deny'];
+	// WireLayer badge variant per rule
+	const VARIANTS = {
+		public: 'success',
+		auth: 'warn',
+		admin: 'warn',
+		blocked: 'danger',
+	};
 	let search, source, filter, expand, namespaces;
 	let current = null;
 
@@ -67,9 +74,9 @@
 		return { rule: select('default', '', group).value };
 	}
 
-	function badge(parent, className, text) {
+	function badge(parent, variant, text) {
 		const el = document.createElement('span');
-		el.className = 'wirecore-dr-badge ' + className;
+		el.className = 'wc-badge wc-badge-' + variant;
 		el.textContent = text;
 		parent.appendChild(el);
 	}
@@ -95,9 +102,7 @@
 					: values.length;
 			badge(
 				box,
-				DENY.includes(list)
-					? 'wirecore-dr-badge-blocked'
-					: 'wirecore-dr-badge-ip',
+				DENY.includes(list) ? 'danger' : 'info',
 				i18n.summary[list] + ': ' + text
 			);
 		});
@@ -116,7 +121,7 @@
 				open = open || result.rule === 'public';
 				badge(
 					cell,
-					'wirecore-dr-badge-' + result.rule,
+					VARIANTS[result.rule],
 					i18n[group] +
 						': ' +
 						i18n.labels[result.rule] +
@@ -129,18 +134,10 @@
 			const allow = count(own, ALLOW) + count(ns, ALLOW);
 			const deny = count(own, DENY) + count(ns, DENY);
 			if (allow) {
-				badge(
-					cell,
-					'wirecore-dr-badge-ip',
-					i18n.summary.allow + ': ' + allow
-				);
+				badge(cell, 'info', i18n.summary.allow + ': ' + allow);
 			}
 			if (deny) {
-				badge(
-					cell,
-					'wirecore-dr-badge-blocked',
-					i18n.summary.deny + ': ' + deny
-				);
+				badge(cell, 'danger', i18n.summary.deny + ': ' + deny);
 			}
 			row.dataset.open = open ? '1' : '';
 			row.dataset.override =
@@ -359,7 +356,8 @@
 
 	fetch(i18n.url, {
 		credentials: 'same-origin',
-		headers: { 'X-WP-Nonce': i18n.nonce },
+		// Accept: application/json, otherwise WordPress ignores _locale=user
+		headers: { 'X-WP-Nonce': i18n.nonce, Accept: 'application/json' },
 	})
 		.then(function (response) {
 			return response.json().then(function (data) {
@@ -375,10 +373,14 @@
 		})
 		.catch(function (error) {
 			body.innerHTML = '';
-			const notice = document.createElement('div');
-			notice.className = 'notice notice-error inline';
-			notice.appendChild(document.createElement('p')).textContent =
-				i18n.loadError + ' ' + error.message;
-			body.appendChild(notice);
+			const alert = document.createElement('div');
+			alert.className = 'wc-alert wc-alert-danger';
+			alert.setAttribute('role', 'alert');
+			const content = alert.appendChild(document.createElement('div'));
+			content.className = 'wc-alert-content';
+			const text = content.appendChild(document.createElement('div'));
+			text.className = 'wc-alert-description';
+			text.textContent = i18n.loadError + ' ' + error.message;
+			body.appendChild(alert);
 		});
 })();

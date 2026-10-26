@@ -94,6 +94,12 @@ jobs:
                   cache: npm
             - run: npm ci
             - run: npm run format:check
+            - name: WireLayer CSS up to date
+              # assets/wirelayer/ is committed – it has to match the package version and the component list
+              run: |
+                  npm run build:css
+                  git diff --exit-code assets/wirelayer
+                  test -z "$(git status --porcelain assets/wirelayer)"
 
     plugin-check:
         name: Plugin Check

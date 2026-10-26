@@ -62,10 +62,17 @@ class WireCore_DR_Admin
 		if ($hook !== 'settings_page_' . self::PAGE) {
 			return;
 		}
+		// WireLayer components, scoped to #wirecore-dr (npm run build:css)
+		wp_enqueue_style(
+			'wirecore-dr-wirelayer',
+			plugins_url('assets/wirelayer/wirelayer.css', WIRECORE_DR_FILE),
+			[],
+			WIRECORE_DR_VERSION
+		);
 		wp_enqueue_style(
 			'wirecore-dr-admin',
 			plugins_url('assets/admin.css', WIRECORE_DR_FILE),
-			[],
+			['wirecore-dr-wirelayer'],
 			WIRECORE_DR_VERSION
 		);
 		wp_enqueue_script(
@@ -94,8 +101,13 @@ class WireCore_DR_Admin
 			],
 			'expand' => __('Expand all', 'wirecore-disable-rest'),
 			'collapse' => __('Collapse all', 'wirecore-disable-rest'),
+			// _locale=user: the route list in the language of the admin, not of the site
 			'url' => add_query_arg(
-				[self::ROUTES_PARAM => 1, '_fields' => self::ROUTES_PARAM],
+				[
+					self::ROUTES_PARAM => 1,
+					'_fields' => self::ROUTES_PARAM,
+					'_locale' => 'user',
+				],
 				rest_url()
 			),
 			'field' => self::ROUTES_PARAM,
@@ -357,14 +369,14 @@ class WireCore_DR_Admin
 				__('Settings saved.', 'wirecore-disable-rest'),
 			],
 			'invalid_ips' => [
-				'warning',
+				'warn',
 				__(
 					'Saved. Invalid IP entries were discarded.',
 					'wirecore-disable-rest'
 				),
 			],
 			'no_js' => [
-				'error',
+				'danger',
 				__(
 					'The rules could not be read. JavaScript is required to save them.',
 					'wirecore-disable-rest'
@@ -379,7 +391,7 @@ class WireCore_DR_Admin
 				__('Settings imported.', 'wirecore-disable-rest'),
 			],
 			'import_failed' => [
-				'error',
+				'danger',
 				__(
 					'Import failed. Please choose an export file of this plugin.',
 					'wirecore-disable-rest'
@@ -388,40 +400,163 @@ class WireCore_DR_Admin
 		];
 		?>
 		<div class="wrap wirecore-dr">
-			<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-
-			<?php if (defined('WIRECORE_DR_OFF') && WIRECORE_DR_OFF): ?>
-				<div class="notice notice-warning">
-					<p><?php esc_html_e(
-     	'WIRECORE_DR_OFF is set in wp-config.php: no rules are enforced.',
-     	'wirecore-disable-rest'
-     ); ?></p>
+			<?php // WordPress moves the notices of other plugins here, outside the WireLayer area
+		?>
+			<hr class="wp-header-end" />
+			<div id="wirecore-dr" data-mode="light">
+				<div class="wc-page-header">
+					<div class="wc-page-header-row">
+						<div class="wc-page-header-heading">
+							<h1 class="wc-page-header-title"><?php echo esc_html(
+       	get_admin_page_title()
+       ); ?></h1>
+						</div>
+					</div>
+					<nav class="wc-tabs-list wc-page-header-tabs" aria-label="<?php echo esc_attr(
+     	get_admin_page_title()
+     ); ?>">
+						<?php foreach ($tabs as $key => $label): ?>
+							<a href="<?php echo esc_url(
+       	self::tab_url($key)
+       ); ?>" class="wc-tabs-trigger"<?php echo $key === $tab
+	? ' data-selected aria-current="page"'
+	: ''; ?>><?php echo esc_html($label); ?></a>
+						<?php endforeach; ?>
+					</nav>
 				</div>
-			<?php endif; ?>
 
-			<?php if (isset($notices[$notice])): ?>
-				<div class="notice notice-<?php echo esc_attr(
-    	$notices[$notice][0]
-    ); ?> is-dismissible">
-					<p><?php echo esc_html($notices[$notice][1]); ?></p>
-				</div>
-			<?php endif; ?>
+				<?php if (defined('WIRECORE_DR_OFF') && WIRECORE_DR_OFF) {
+    	self::alert(
+    		'warn',
+    		__(
+    			'WIRECORE_DR_OFF is set in wp-config.php: no rules are enforced.',
+    			'wirecore-disable-rest'
+    		)
+    	);
+    } ?>
 
-			<nav class="nav-tab-wrapper">
-				<?php foreach ($tabs as $key => $label): ?>
-					<a href="<?php echo esc_url(
-     	self::tab_url($key)
-     ); ?>" class="nav-tab<?php echo $key === $tab
-	? ' nav-tab-active'
-	: ''; ?>"><?php echo esc_html($label); ?></a>
-				<?php endforeach; ?>
-			</nav>
+				<?php if (isset($notices[$notice])) {
+    	self::alert($notices[$notice][0], $notices[$notice][1]);
+    } ?>
 
-			<?php
-   $method = 'tab_' . $tab;
-   self::$method();?>
+				<?php
+    $method = 'tab_' . $tab;
+    self::$method();?>
+			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Inline Lucide icon (ISC license), hidden from assistive technology.
+	 */
+	private static function icon($name, $class)
+	{
+		$paths = [
+			'check' => '<path d="M20 6 9 17l-5-5"/>',
+			'chevron-down' => '<path d="m6 9 6 6 6-6"/>',
+			'chevron-right' => '<path d="m9 18 6-6-6-6"/>',
+			'loader' => '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
+			'info' =>
+				'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+			'success' =>
+				'<circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/>',
+			'warn' =>
+				'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+			'danger' =>
+				'<path d="m15 9-6 6"/><path d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z"/><path d="m9 9 6 6"/>',
+		];
+		printf(
+			'<svg class="%s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>',
+			esc_attr($class),
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG markup from the list above
+			$paths[$name]
+		);
+	}
+
+	/**
+	 * Status message; $status is info, success, warn or danger.
+	 */
+	private static function alert($status, $text)
+	{
+		?>
+		<div class="wc-alert wc-alert-<?php echo esc_attr(
+  	$status
+  ); ?>" role="<?php echo in_array($status, ['warn', 'danger'], true) ? 'alert' : 'status'; ?>">
+			<span class="wc-alert-icon-box"><?php self::icon(
+   	$status,
+   	'wc-alert-icon'
+   ); ?></span>
+			<div class="wc-alert-content">
+				<div class="wc-alert-description"><?php echo esc_html($text); ?></div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Title and optional description at the top of a card.
+	 */
+	private static function card_header($title, $subtitle = '')
+	{
+		?>
+		<div class="wc-card-parts-header">
+			<div class="wc-card-parts-heading">
+				<h2 class="wc-card-parts-title"><?php echo esc_html($title); ?></h2>
+				<?php if ($subtitle !== ''): ?>
+					<p class="wc-card-parts-subtitle"><?php echo esc_html($subtitle); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Checkbox with a native input; $attributes are the input's attributes
+	 * (name, value, data-list …), $title an optional bold line above the label,
+	 * $code an optional code snippet after it.
+	 */
+	private static function checkbox(
+		array $attributes,
+		$checked,
+		$label,
+		$title = '',
+		$code = ''
+	) {
+		?>
+		<label class="wc-checkbox">
+			<input type="checkbox" class="wc-checkbox-input"<?php
+   foreach ($attributes as $attribute => $value) {
+   	printf(' %s="%s"', esc_attr($attribute), esc_attr($value));
+   }
+   checked($checked);
+   ?> />
+			<span class="wc-checkbox-control"><?php self::icon(
+   	'check',
+   	'wc-checkbox-icon'
+   ); ?></span>
+			<span class="wc-checkbox-label">
+				<?php if ($title !== ''): ?>
+					<span class="wirecore-dr-checkbox-title"><?php echo esc_html($title); ?></span>
+				<?php endif; ?>
+				<?php echo esc_html($label); ?>
+				<?php if ($code !== ''): ?>
+					<code class="wc-inline-code"><?php echo esc_html($code); ?></code>
+				<?php endif; ?>
+			</span>
+		</label>
+		<?php
+	}
+
+	/**
+	 * Text with <code> from a translation, the code styled by WireLayer.
+	 */
+	private static function code_text($text)
+	{
+		echo wp_kses(
+			str_replace('<code>', '<code class="wc-inline-code">', $text),
+			['code' => ['class' => []]]
+		);
 	}
 
 	private static function rule_select(
@@ -436,9 +571,10 @@ class WireCore_DR_Admin
 			unset($labels['inherit']);
 		}
 		?>
-		<select data-scope="<?php echo esc_attr(
-  	$scope
-  ); ?>" data-key="<?php echo esc_attr(
+		<span class="wc-native-select wc-native-select-sm wirecore-dr-rule">
+			<select class="wc-native-select-select" data-scope="<?php echo esc_attr(
+   	$scope
+   ); ?>" data-key="<?php echo esc_attr(
 	$key
 ); ?>" data-group="<?php echo esc_attr(
 	$group
@@ -447,13 +583,15 @@ class WireCore_DR_Admin
 		? __('Read', 'wirecore-disable-rest')
 		: __('Write', 'wirecore-disable-rest')
 ); ?>"<?php disabled($disabled); ?>>
-			<?php foreach ($labels as $rule => $label): ?>
-				<option value="<?php echo esc_attr($rule); ?>"<?php selected(
+				<?php foreach ($labels as $rule => $label): ?>
+					<option value="<?php echo esc_attr($rule); ?>"<?php selected(
 	$value,
 	$rule
 ); ?>><?php echo esc_html($label); ?></option>
-			<?php endforeach; ?>
-		</select>
+				<?php endforeach; ?>
+			</select>
+			<?php self::icon('chevron-down', 'wc-native-select-icon'); ?>
+		</span>
 		<?php
 	}
 
@@ -497,76 +635,93 @@ class WireCore_DR_Admin
 		$settings = WireCore_DR_Settings::get(); ?>
 		<form method="post" action="<?php echo esc_url(
   	admin_url('admin-post.php')
-  ); ?>" id="wirecore-dr-routes">
+  ); ?>" id="wirecore-dr-routes" class="wirecore-dr-stack">
 			<input type="hidden" name="action" value="wirecore_dr_routes" />
 			<input type="hidden" name="rules_json" value="" />
 			<?php wp_nonce_field('wirecore_dr_routes'); ?>
 
-			<h2><?php esc_html_e('Default rule', 'wirecore-disable-rest'); ?></h2>
-			<p class="description"><?php esc_html_e(
-   	'Applies to all routes without a custom rule. “Read” covers GET/HEAD, “Write” covers POST/PUT/PATCH/DELETE. The most specific rule wins: route before namespace before automatic allowance before default.',
-   	'wirecore-disable-rest'
-   ); ?></p>
-			<p class="wirecore-dr-default">
-				<label><?php esc_html_e('Read', 'wirecore-disable-rest'); ?>
-					<?php self::rule_select(
-     	'default',
-     	'',
-     	'read',
-     	$settings['default']['read']
-     ); ?></label>
-				<label><?php esc_html_e('Write', 'wirecore-disable-rest'); ?>
-					<?php self::rule_select(
-     	'default',
-     	'',
-     	'write',
-     	$settings['default']['write']
-     ); ?></label>
-			</p>
+			<section class="wc-card">
+				<?php self::card_header(
+    	__('Default rule', 'wirecore-disable-rest'),
+    	__(
+    		'Applies to all routes without a custom rule. “Read” covers GET/HEAD, “Write” covers POST/PUT/PATCH/DELETE. The most specific rule wins: route before namespace before automatic allowance before default.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?>
+				<div class="wirecore-dr-row">
+					<label class="wirecore-dr-labeled"><?php esc_html_e(
+     	'Read',
+     	'wirecore-disable-rest'
+     ); ?>
+						<?php self::rule_select(
+      	'default',
+      	'',
+      	'read',
+      	$settings['default']['read']
+      ); ?></label>
+					<label class="wirecore-dr-labeled"><?php esc_html_e(
+     	'Write',
+     	'wirecore-disable-rest'
+     ); ?>
+						<?php self::rule_select(
+      	'default',
+      	'',
+      	'write',
+      	$settings['default']['write']
+      ); ?></label>
+				</div>
+			</section>
 
-			<h2><?php esc_html_e('Quick actions', 'wirecore-disable-rest'); ?></h2>
-			<p class="wirecore-dr-presets">
-				<button type="button" class="button" data-preset="guests"><?php esc_html_e(
-    	'Block everything for guests',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<button type="button" class="button" data-preset="all"><?php esc_html_e(
-    	'Block everything',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<button type="button" class="button" data-preset="users"><?php esc_html_e(
-    	'User list (/wp/v2/users) for admins only',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<button type="button" class="button" data-preset="reset"><?php esc_html_e(
-    	'Reset custom rules',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<span class="description"><?php esc_html_e(
-    	'Changes take effect only after saving.',
-    	'wirecore-disable-rest'
-    ); ?></span>
-			</p>
+			<section class="wc-card">
+				<?php self::card_header(
+    	__('Quick actions', 'wirecore-disable-rest'),
+    	__('Changes take effect only after saving.', 'wirecore-disable-rest')
+    ); ?>
+				<div class="wirecore-dr-row">
+					<button type="button" class="wc-button wc-button-outline wc-button-sm" data-preset="guests"><?php esc_html_e(
+     	'Block everything for guests',
+     	'wirecore-disable-rest'
+     ); ?></button>
+					<button type="button" class="wc-button wc-button-outline wc-button-sm" data-preset="all"><?php esc_html_e(
+     	'Block everything',
+     	'wirecore-disable-rest'
+     ); ?></button>
+					<button type="button" class="wc-button wc-button-outline wc-button-sm" data-preset="users"><?php esc_html_e(
+     	'User list (/wp/v2/users) for admins only',
+     	'wirecore-disable-rest'
+     ); ?></button>
+					<button type="button" class="wc-button wc-button-outline wc-button-sm" data-preset="reset"><?php esc_html_e(
+     	'Reset custom rules',
+     	'wirecore-disable-rest'
+     ); ?></button>
+				</div>
+			</section>
 
-			<h2><?php esc_html_e('Routes', 'wirecore-disable-rest'); ?></h2>
-			<p class="description"><?php esc_html_e(
-   	'Use “Advanced” to additionally allow or deny IP addresses, roles and users for a namespace or route. The entries of a namespace apply to all of its routes.',
-   	'wirecore-disable-rest'
-   ); ?></p>
-			<div id="wirecore-dr-routes-body">
-				<p><span class="spinner is-active wirecore-dr-spinner"></span><?php esc_html_e(
-    	'Loading routes …',
+			<section class="wirecore-dr-stack">
+				<?php self::card_header(
+    	__('Routes', 'wirecore-disable-rest'),
+    	__(
+    		'Use “Advanced” to additionally allow or deny IP addresses, roles and users for a namespace or route. The entries of a namespace apply to all of its routes.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?>
+				<div id="wirecore-dr-routes-body" class="wirecore-dr-stack wirecore-dr-namespaces">
+					<span class="wc-spinner" role="status">
+						<?php self::icon('loader', 'wc-spinner-icon'); ?>
+						<span class="wc-spinner-label"><?php esc_html_e(
+      	'Loading routes …',
+      	'wirecore-disable-rest'
+      ); ?></span>
+					</span>
+				</div>
+			</section>
+
+			<div class="wirecore-dr-row">
+				<button type="submit" class="wc-button" disabled><?php esc_html_e(
+    	'Save rules',
     	'wirecore-disable-rest'
-    ); ?></p>
+    ); ?></button>
 			</div>
-
-			<?php submit_button(
-   	__('Save rules', 'wirecore-disable-rest'),
-   	'primary',
-   	'submit',
-   	true,
-   	['disabled' => 'disabled']
-   ); ?>
 
 			<?php self::advanced_dialog(); ?>
 		</form>
@@ -580,70 +735,100 @@ class WireCore_DR_Admin
 	private static function advanced_dialog()
 	{
 		$roles = self::role_names(); ?>
-		<dialog id="wirecore-dr-advanced" class="wirecore-dr-dialog" aria-labelledby="wirecore-dr-advanced-title">
-			<h2 id="wirecore-dr-advanced-title"><?php esc_html_e(
-   	'Advanced:',
-   	'wirecore-disable-rest'
-   ); ?> <code class="wirecore-dr-advanced-target"></code></h2>
-			<p class="description"><?php esc_html_e(
-   	'Applies to reading and writing. Denials take precedence over allowances and also apply to administrators. Allowances grant access regardless of the rule. For a route, the entries of its namespace apply as well.',
-   	'wirecore-disable-rest'
-   ); ?></p>
-			<div class="wirecore-dr-dialog-columns">
-				<fieldset>
-					<legend><?php esc_html_e('Allow', 'wirecore-disable-rest'); ?></legend>
-					<label for="wirecore-dr-adv-ip-allow"><?php esc_html_e(
-     	'IP addresses / CIDR ranges',
+		<dialog id="wirecore-dr-advanced" class="wc-dialog wc-dialog-xl" aria-labelledby="wirecore-dr-advanced-title">
+			<div class="wc-dialog-content">
+				<div class="wc-dialog-body">
+					<h2 class="wc-dialog-title" id="wirecore-dr-advanced-title"><?php esc_html_e(
+     	'Advanced:',
      	'wirecore-disable-rest'
-     ); ?></label>
-					<textarea id="wirecore-dr-adv-ip-allow" class="code" rows="3" data-list="ip_allow" placeholder="203.0.113.5&#10;10.0.0.0/8"></textarea>
-					<label for="wirecore-dr-adv-users-allow"><?php esc_html_e(
-     	'User IDs',
-     	'wirecore-disable-rest'
-     ); ?></label>
-					<input type="text" id="wirecore-dr-adv-users-allow" class="code" data-list="users_allow" placeholder="12, 34" />
-					<p class="wirecore-dr-dialog-label"><?php esc_html_e(
-     	'Roles',
+     ); ?> <code class="wc-inline-code wirecore-dr-advanced-target"></code></h2>
+					<p class="wc-dialog-description"><?php esc_html_e(
+     	'Applies to reading and writing. Denials take precedence over allowances and also apply to administrators. Allowances grant access regardless of the rule. For a route, the entries of its namespace apply as well.',
      	'wirecore-disable-rest'
      ); ?></p>
-					<?php foreach ($roles as $role => $name): ?>
-						<label class="wirecore-dr-role"><input type="checkbox" data-list="roles_allow" value="<?php echo esc_attr(
-      	$role
-      ); ?>" /> <?php echo esc_html($name); ?></label>
-					<?php endforeach; ?>
-				</fieldset>
-				<fieldset>
-					<legend><?php esc_html_e('Deny', 'wirecore-disable-rest'); ?></legend>
-					<label for="wirecore-dr-adv-ip-deny"><?php esc_html_e(
-     	'IP addresses / CIDR ranges',
+					<div class="wirecore-dr-columns">
+						<fieldset class="wc-fieldset">
+							<legend class="wc-fieldset-legend"><?php esc_html_e(
+       	'Allow',
+       	'wirecore-disable-rest'
+       ); ?></legend>
+							<div class="wc-field">
+								<label class="wc-field-label" for="wirecore-dr-adv-ip-allow"><?php esc_html_e(
+        	'IP addresses / CIDR ranges',
+        	'wirecore-disable-rest'
+        ); ?></label>
+								<textarea id="wirecore-dr-adv-ip-allow" class="wc-textarea" rows="3" data-list="ip_allow" placeholder="203.0.113.5&#10;10.0.0.0/8"></textarea>
+							</div>
+							<div class="wc-field">
+								<label class="wc-field-label" for="wirecore-dr-adv-users-allow"><?php esc_html_e(
+        	'User IDs',
+        	'wirecore-disable-rest'
+        ); ?></label>
+								<div class="wc-input">
+									<input type="text" id="wirecore-dr-adv-users-allow" class="wc-input-control" data-list="users_allow" placeholder="12, 34" />
+								</div>
+							</div>
+							<fieldset class="wc-checkbox-group">
+								<legend class="wc-checkbox-group-label"><?php esc_html_e(
+        	'Roles',
+        	'wirecore-disable-rest'
+        ); ?></legend>
+								<div class="wc-checkbox-group-items">
+									<?php foreach ($roles as $role => $name) {
+         	self::checkbox(
+         		['data-list' => 'roles_allow', 'value' => $role],
+         		false,
+         		$name
+         	);
+         } ?>
+								</div>
+							</fieldset>
+						</fieldset>
+						<fieldset class="wc-fieldset">
+							<legend class="wc-fieldset-legend"><?php esc_html_e(
+       	'Deny',
+       	'wirecore-disable-rest'
+       ); ?></legend>
+							<div class="wc-field">
+								<label class="wc-field-label" for="wirecore-dr-adv-ip-deny"><?php esc_html_e(
+        	'IP addresses / CIDR ranges',
+        	'wirecore-disable-rest'
+        ); ?></label>
+								<textarea id="wirecore-dr-adv-ip-deny" class="wc-textarea" rows="3" data-list="ip_deny"></textarea>
+							</div>
+							<fieldset class="wc-checkbox-group">
+								<legend class="wc-checkbox-group-label"><?php esc_html_e(
+        	'Roles',
+        	'wirecore-disable-rest'
+        ); ?></legend>
+								<div class="wc-checkbox-group-items">
+									<?php foreach ($roles as $role => $name) {
+         	self::checkbox(
+         		['data-list' => 'roles_deny', 'value' => $role],
+         		false,
+         		$name
+         	);
+         } ?>
+								</div>
+							</fieldset>
+						</fieldset>
+					</div>
+				</div>
+				<div class="wc-dialog-footer">
+					<span class="wirecore-dr-hint"><?php esc_html_e(
+     	'Changes are saved with “Save rules”.',
      	'wirecore-disable-rest'
-     ); ?></label>
-					<textarea id="wirecore-dr-adv-ip-deny" class="code" rows="3" data-list="ip_deny"></textarea>
-					<p class="wirecore-dr-dialog-label"><?php esc_html_e(
-     	'Roles',
+     ); ?></span>
+					<button type="button" class="wc-button wc-button-outline" data-dialog="cancel"><?php esc_html_e(
+     	'Cancel',
      	'wirecore-disable-rest'
-     ); ?></p>
-					<?php foreach ($roles as $role => $name): ?>
-						<label class="wirecore-dr-role"><input type="checkbox" data-list="roles_deny" value="<?php echo esc_attr(
-      	$role
-      ); ?>" /> <?php echo esc_html($name); ?></label>
-					<?php endforeach; ?>
-				</fieldset>
+     ); ?></button>
+					<button type="button" class="wc-button" data-dialog="apply"><?php esc_html_e(
+     	'Apply',
+     	'wirecore-disable-rest'
+     ); ?></button>
+				</div>
 			</div>
-			<p class="wirecore-dr-dialog-actions">
-				<button type="button" class="button button-primary" data-dialog="apply"><?php esc_html_e(
-    	'Apply',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<button type="button" class="button" data-dialog="cancel"><?php esc_html_e(
-    	'Cancel',
-    	'wirecore-disable-rest'
-    ); ?></button>
-				<span class="description"><?php esc_html_e(
-    	'Changes are saved with “Save rules”.',
-    	'wirecore-disable-rest'
-    ); ?></span>
-			</p>
 		</dialog>
 		<?php
 	}
@@ -656,7 +841,7 @@ class WireCore_DR_Admin
 	{
 		?>
 		<span class="wirecore-dr-advanced-wrap">
-			<button type="button" class="button button-small wirecore-dr-advanced-open" data-target="<?php echo esc_attr(
+			<button type="button" class="wc-button wc-button-outline wc-button-xs wirecore-dr-advanced-open" data-target="<?php echo esc_attr(
    	$target
    ); ?>" data-access="<?php echo esc_attr(wp_json_encode((object) $access)); ?>"><?php esc_html_e('Advanced', 'wirecore-disable-rest'); ?></button>
 			<span class="wirecore-dr-access-summary"></span>
@@ -722,62 +907,72 @@ class WireCore_DR_Admin
 			}
 		}
 		?>
-		<div class="wirecore-dr-status">
-			<p><?php echo esc_html(
-   	sprintf(
-   		/* translators: 1: number of routes, 2: number of namespaces, 3: routes reachable for guests */
-   		__(
-   			'%1$d routes registered in %2$d namespaces, %3$d of them reachable for logged-out visitors (without whitelists).',
-   			'wirecore-disable-rest'
-   		),
-   		$total,
-   		count($namespaces),
-   		$open
-   	)
-   ); ?></p>
-		</div>
+		<?php self::alert(
+  	'info',
+  	sprintf(
+  		/* translators: 1: number of routes, 2: number of namespaces, 3: routes reachable for guests */
+  		__(
+  			'%1$d routes registered in %2$d namespaces, %3$d of them reachable for logged-out visitors (without whitelists).',
+  			'wirecore-disable-rest'
+  		),
+  		$total,
+  		count($namespaces),
+  		$open
+  	)
+  ); ?>
 
-		<div class="wirecore-dr-toolbar">
-			<input type="search" id="wirecore-dr-search" placeholder="<?php esc_attr_e(
-   	'Search route or namespace …',
-   	'wirecore-disable-rest'
-   ); ?>" />
-			<select id="wirecore-dr-source" aria-label="<?php esc_attr_e(
-   	'Source',
-   	'wirecore-disable-rest'
-   ); ?>">
-				<option value=""><?php esc_html_e(
-    	'All sources',
+		<div class="wirecore-dr-row">
+			<div class="wc-input wc-input-sm wirecore-dr-search">
+				<input type="search" class="wc-input-control" id="wirecore-dr-search" placeholder="<?php esc_attr_e(
+    	'Search route or namespace …',
     	'wirecore-disable-rest'
-    ); ?></option>
-				<?php foreach (array_keys($sources) as $source): ?>
-					<option value="<?php echo esc_attr($source); ?>"><?php echo esc_html(
+    ); ?>" aria-label="<?php esc_attr_e(
+	'Search route or namespace …',
+	'wirecore-disable-rest'
+); ?>" />
+			</div>
+			<span class="wc-native-select wc-native-select-sm wirecore-dr-filter">
+				<select class="wc-native-select-select" id="wirecore-dr-source" aria-label="<?php esc_attr_e(
+    	'Source',
+    	'wirecore-disable-rest'
+    ); ?>">
+					<option value=""><?php esc_html_e(
+     	'All sources',
+     	'wirecore-disable-rest'
+     ); ?></option>
+					<?php foreach (array_keys($sources) as $source): ?>
+						<option value="<?php echo esc_attr($source); ?>"><?php echo esc_html(
 	$source
 ); ?></option>
-				<?php endforeach; ?>
-			</select>
-			<select id="wirecore-dr-filter" aria-label="<?php esc_attr_e(
-   	'Status',
-   	'wirecore-disable-rest'
-   ); ?>">
-				<option value=""><?php esc_html_e(
-    	'All routes',
+					<?php endforeach; ?>
+				</select>
+				<?php self::icon('chevron-down', 'wc-native-select-icon'); ?>
+			</span>
+			<span class="wc-native-select wc-native-select-sm wirecore-dr-filter">
+				<select class="wc-native-select-select" id="wirecore-dr-filter" aria-label="<?php esc_attr_e(
+    	'Status',
     	'wirecore-disable-rest'
-    ); ?></option>
-				<option value="override"><?php esc_html_e(
-    	'With custom rule',
-    	'wirecore-disable-rest'
-    ); ?></option>
-				<option value="public"><?php esc_html_e(
-    	'Reachable for guests',
-    	'wirecore-disable-rest'
-    ); ?></option>
-				<option value="restricted"><?php esc_html_e(
-    	'Blocked for guests',
-    	'wirecore-disable-rest'
-    ); ?></option>
-			</select>
-			<button type="button" class="button" id="wirecore-dr-expand"><?php esc_html_e(
+    ); ?>">
+					<option value=""><?php esc_html_e(
+     	'All routes',
+     	'wirecore-disable-rest'
+     ); ?></option>
+					<option value="override"><?php esc_html_e(
+     	'With custom rule',
+     	'wirecore-disable-rest'
+     ); ?></option>
+					<option value="public"><?php esc_html_e(
+     	'Reachable for guests',
+     	'wirecore-disable-rest'
+     ); ?></option>
+					<option value="restricted"><?php esc_html_e(
+     	'Blocked for guests',
+     	'wirecore-disable-rest'
+     ); ?></option>
+				</select>
+				<?php self::icon('chevron-down', 'wc-native-select-icon'); ?>
+			</span>
+			<button type="button" class="wc-button wc-button-outline wc-button-sm" id="wirecore-dr-expand"><?php esc_html_e(
    	'Expand all',
    	'wirecore-disable-rest'
    ); ?></button>
@@ -785,13 +980,13 @@ class WireCore_DR_Admin
 
 		<?php foreach ($namespaces as $namespace => $data):
   	$rules = $settings['namespaces'][$namespace] ?? $inherit; ?>
-			<div class="wirecore-dr-namespace" data-namespace="<?php echo esc_attr(
+			<div class="wc-card wirecore-dr-namespace" data-namespace="<?php echo esc_attr(
    	$namespace
    ); ?>">
 				<div class="wirecore-dr-namespace-head">
 					<button type="button" class="wirecore-dr-toggle" aria-expanded="false">
-						<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
-						<code><?php echo esc_html(
+						<?php self::icon('chevron-right', 'wirecore-dr-toggle-icon'); ?>
+						<code class="wc-inline-code"><?php echo esc_html(
       	$namespace !== ''
       		? $namespace
       		: __('(no namespace)', 'wirecore-disable-rest')
@@ -812,7 +1007,7 @@ class WireCore_DR_Admin
  	)
  ); ?></span>
 					<?php if (in_array($namespace, $auto, true)): ?>
-						<span class="wirecore-dr-badge wirecore-dr-badge-public"><?php esc_html_e(
+						<span class="wc-badge wc-badge-success"><?php esc_html_e(
       	'Automatically allowed',
       	'wirecore-disable-rest'
       ); ?></span>
@@ -822,14 +1017,20 @@ class WireCore_DR_Admin
      	$settings['access'][$namespace] ?? []
      ); ?>
 					<span class="wirecore-dr-selects">
-						<label><?php esc_html_e('Read', 'wirecore-disable-rest'); ?>
+						<label class="wirecore-dr-labeled"><?php esc_html_e(
+      	'Read',
+      	'wirecore-disable-rest'
+      ); ?>
 							<?php self::rule_select(
        	'namespace',
        	$namespace,
        	'read',
        	$rules['read']
        ); ?></label>
-						<label><?php esc_html_e('Write', 'wirecore-disable-rest'); ?>
+						<label class="wirecore-dr-labeled"><?php esc_html_e(
+      	'Write',
+      	'wirecore-disable-rest'
+      ); ?>
 							<?php self::rule_select(
        	'namespace',
        	$namespace,
@@ -838,87 +1039,131 @@ class WireCore_DR_Admin
        ); ?></label>
 					</span>
 				</div>
-				<table class="widefat striped wirecore-dr-routes" hidden>
-					<thead>
-						<tr>
-							<th><?php esc_html_e('Route', 'wirecore-disable-rest'); ?></th>
-							<th><?php esc_html_e('Methods', 'wirecore-disable-rest'); ?></th>
-							<th><?php esc_html_e('Source', 'wirecore-disable-rest'); ?></th>
-							<th><?php esc_html_e('Read', 'wirecore-disable-rest'); ?></th>
-							<th><?php esc_html_e('Write', 'wirecore-disable-rest'); ?></th>
-							<th><?php esc_html_e('Effective', 'wirecore-disable-rest'); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ($data['routes'] as $route => $info):
-      	$rules = $settings['routes'][$route] ?? $inherit; ?>
-							<tr class="wirecore-dr-route" data-route="<?php echo esc_attr(
-       	$route
-       ); ?>" data-namespace="<?php echo esc_attr(
+				<div class="wc-data-table-scroll wirecore-dr-routes" hidden>
+					<table class="wc-data-table-table">
+						<thead>
+							<tr class="wc-data-table-head-row">
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Route',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Methods',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Source',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Read',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Write',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Effective',
+        	'wirecore-disable-rest'
+        ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($data['routes'] as $route => $info):
+       	$rules = $settings['routes'][$route] ?? $inherit; ?>
+								<tr class="wc-data-table-row wirecore-dr-route" data-route="<?php echo esc_attr(
+        	$route
+        ); ?>" data-namespace="<?php echo esc_attr(
 	$namespace
 ); ?>" data-source="<?php echo esc_attr($info['source']); ?>">
-								<td>
-									<code><?php echo esc_html($route); ?></code>
-									<?php self::advanced_button($route, $settings['access'][$route] ?? []); ?>
-								</td>
-								<td><?php echo esc_html(implode(', ', $info['methods'])); ?></td>
-								<td><?php echo esc_html($info['source']); ?></td>
-								<td><?php self::rule_select(
-        	'route',
-        	$route,
-        	'read',
-        	$info['read'] ? $rules['read'] : 'inherit',
-        	!$info['read']
-        ); ?></td>
-								<td><?php self::rule_select(
-        	'route',
-        	$route,
-        	'write',
-        	$info['write'] ? $rules['write'] : 'inherit',
-        	!$info['write']
-        ); ?></td>
-								<td class="wirecore-dr-effective"></td>
-							</tr>
-						<?php
-      endforeach; ?>
-					</tbody>
-				</table>
+									<td class="wc-data-table-td">
+										<code class="wc-inline-code"><?php echo esc_html($route); ?></code>
+										<?php self::advanced_button($route, $settings['access'][$route] ?? []); ?>
+									</td>
+									<td class="wc-data-table-td"><?php echo esc_html(
+         	implode(', ', $info['methods'])
+         ); ?></td>
+									<td class="wc-data-table-td"><?php echo esc_html($info['source']); ?></td>
+									<td class="wc-data-table-td"><?php self::rule_select(
+         	'route',
+         	$route,
+         	'read',
+         	$info['read'] ? $rules['read'] : 'inherit',
+         	!$info['read']
+         ); ?></td>
+									<td class="wc-data-table-td"><?php self::rule_select(
+         	'route',
+         	$route,
+         	'write',
+         	$info['write'] ? $rules['write'] : 'inherit',
+         	!$info['write']
+         ); ?></td>
+									<td class="wc-data-table-td wirecore-dr-effective"></td>
+								</tr>
+							<?php
+       endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		<?php
   endforeach; ?>
 
 		<?php if ($orphans): ?>
-			<h2><?php esc_html_e(
-   	'Rules without a registered route',
-   	'wirecore-disable-rest'
-   ); ?></h2>
-			<p class="description"><?php esc_html_e(
-   	'Rules for namespaces or routes that are currently not registered, e.g. because a plugin is deactivated. They are kept until they are set to “Inherit” and nothing is entered under “Advanced”.',
-   	'wirecore-disable-rest'
-   ); ?></p>
-			<table class="widefat striped wirecore-dr-orphans">
-				<thead>
-					<tr>
-						<th><?php esc_html_e('Namespace / route', 'wirecore-disable-rest'); ?></th>
-						<th><?php esc_html_e('Read', 'wirecore-disable-rest'); ?></th>
-						<th><?php esc_html_e('Write', 'wirecore-disable-rest'); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($orphans as $key => $orphan):
-     	list($scope, $rules) = $orphan; ?>
-						<tr>
-							<td>
-								<code><?php echo esc_html($key); ?></code>
-								<?php self::advanced_button($key, $settings['access'][$key] ?? []); ?>
-							</td>
-							<td><?php self::rule_select($scope, $key, 'read', $rules['read']); ?></td>
-							<td><?php self::rule_select($scope, $key, 'write', $rules['write']); ?></td>
-						</tr>
-					<?php
-     endforeach; ?>
-				</tbody>
-			</table>
+			<section class="wirecore-dr-stack">
+				<?php self::card_header(
+    	__('Rules without a registered route', 'wirecore-disable-rest'),
+    	__(
+    		'Rules for namespaces or routes that are currently not registered, e.g. because a plugin is deactivated. They are kept until they are set to “Inherit” and nothing is entered under “Advanced”.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?>
+				<div class="wc-data-table-scroll">
+					<table class="wc-data-table-table">
+						<thead>
+							<tr class="wc-data-table-head-row">
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Namespace / route',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Read',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Write',
+        	'wirecore-disable-rest'
+        ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($orphans as $key => $orphan):
+       	list($scope, $rules) = $orphan; ?>
+								<tr class="wc-data-table-row">
+									<td class="wc-data-table-td">
+										<code class="wc-inline-code"><?php echo esc_html($key); ?></code>
+										<?php self::advanced_button($key, $settings['access'][$key] ?? []); ?>
+									</td>
+									<td class="wc-data-table-td"><?php self::rule_select(
+         	$scope,
+         	$key,
+         	'read',
+         	$rules['read']
+         ); ?></td>
+									<td class="wc-data-table-td"><?php self::rule_select(
+         	$scope,
+         	$key,
+         	'write',
+         	$rules['write']
+         ); ?></td>
+								</tr>
+							<?php
+       endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			</section>
 		<?php endif; ?>
 		<?php
 	}
@@ -966,133 +1211,128 @@ class WireCore_DR_Admin
 		?>
 		<form method="post" action="<?php echo esc_url(
   	admin_url('admin-post.php')
-  ); ?>">
+  ); ?>" class="wirecore-dr-stack">
 			<input type="hidden" name="action" value="wirecore_dr_settings" />
 			<?php wp_nonce_field('wirecore_dr_settings'); ?>
 
-			<h2><?php esc_html_e('Access', 'wirecore-disable-rest'); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><?php esc_html_e(
+			<section class="wc-card">
+				<?php self::card_header(__('Access', 'wirecore-disable-rest')); ?>
+				<fieldset class="wc-checkbox-group" aria-describedby="wirecore-dr-roles-help">
+					<legend class="wc-checkbox-group-label"><?php esc_html_e(
      	'Roles for “Logged-in only”',
      	'wirecore-disable-rest'
-     ); ?></th>
-					<td>
-						<fieldset>
-							<?php foreach (wp_roles()->get_names() as $role => $name): ?>
-								<label><input type="checkbox" name="allowed_roles[]" value="<?php echo esc_attr(
-        	$role
-        ); ?>"<?php checked(
-	in_array($role, $settings['allowed_roles'], true)
-); ?> /> <?php echo esc_html(translate_user_role($name)); ?></label><br />
-							<?php endforeach; ?>
-						</fieldset>
-						<p class="description"><?php esc_html_e(
-      	'No selection = all logged-in users.',
-      	'wirecore-disable-rest'
-      ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wirecore-dr-user-whitelist"><?php esc_html_e(
+     ); ?></legend>
+					<div class="wc-checkbox-group-items">
+						<?php foreach (wp_roles()->get_names() as $role => $name) {
+      	self::checkbox(
+      		['name' => 'allowed_roles[]', 'value' => $role],
+      		in_array($role, $settings['allowed_roles'], true),
+      		translate_user_role($name)
+      	);
+      } ?>
+					</div>
+					<span class="wc-checkbox-group-helper-text" id="wirecore-dr-roles-help"><?php esc_html_e(
+     	'No selection = all logged-in users.',
+     	'wirecore-disable-rest'
+     ); ?></span>
+				</fieldset>
+				<div class="wc-field">
+					<label class="wc-field-label" for="wirecore-dr-user-whitelist"><?php esc_html_e(
      	'Allowed user IDs',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td>
-						<textarea id="wirecore-dr-user-whitelist" name="user_whitelist" rows="3" class="regular-text code"><?php echo esc_textarea(
-      	implode("\n", $settings['user_whitelist'])
-      ); ?></textarea>
-						<p class="description"><?php esc_html_e(
-      	'These users are never blocked. One ID per line.',
-      	'wirecore-disable-rest'
-      ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wirecore-dr-ip-whitelist"><?php esc_html_e(
+     ); ?></label>
+					<textarea id="wirecore-dr-user-whitelist" name="user_whitelist" rows="3" class="wc-textarea" aria-describedby="wirecore-dr-user-whitelist-help"><?php echo esc_textarea(
+     	implode("\n", $settings['user_whitelist'])
+     ); ?></textarea>
+					<span class="wc-field-helper-text" id="wirecore-dr-user-whitelist-help"><?php esc_html_e(
+     	'These users are never blocked. One ID per line.',
+     	'wirecore-disable-rest'
+     ); ?></span>
+				</div>
+				<div class="wc-field">
+					<label class="wc-field-label" for="wirecore-dr-ip-whitelist"><?php esc_html_e(
      	'Allowed IP addresses',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td>
-						<textarea id="wirecore-dr-ip-whitelist" name="ip_whitelist" rows="4" class="regular-text code"><?php echo esc_textarea(
-      	implode("\n", $settings['ip_whitelist'])
-      ); ?></textarea>
-						<p class="description"><?php echo esc_html(
-      	sprintf(
-      		/* translators: %s: current IP address */
-      		__(
-      			'Applies to all routes. One IP or CIDR range per line, e.g. 203.0.113.5 or 10.0.0.0/8. Allowances for individual routes are available in the route list under “Advanced”. Your current IP: %s',
-      			'wirecore-disable-rest'
-      		),
-      		WireCore_DR_Guard::client_ip()
-      	)
-      ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wirecore-dr-ip-blacklist"><?php esc_html_e(
+     ); ?></label>
+					<textarea id="wirecore-dr-ip-whitelist" name="ip_whitelist" rows="4" class="wc-textarea" aria-describedby="wirecore-dr-ip-whitelist-help"><?php echo esc_textarea(
+     	implode("\n", $settings['ip_whitelist'])
+     ); ?></textarea>
+					<span class="wc-field-helper-text" id="wirecore-dr-ip-whitelist-help"><?php echo esc_html(
+     	sprintf(
+     		/* translators: %s: current IP address */
+     		__(
+     			'Applies to all routes. One IP or CIDR range per line, e.g. 203.0.113.5 or 10.0.0.0/8. Allowances for individual routes are available in the route list under “Advanced”. Your current IP: %s',
+     			'wirecore-disable-rest'
+     		),
+     		WireCore_DR_Guard::client_ip()
+     	)
+     ); ?></span>
+				</div>
+				<div class="wc-field">
+					<label class="wc-field-label" for="wirecore-dr-ip-blacklist"><?php esc_html_e(
      	'Blocked IP addresses',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td>
-						<textarea id="wirecore-dr-ip-blacklist" name="ip_blacklist" rows="4" class="regular-text code"><?php echo esc_textarea(
-      	implode("\n", $settings['ip_blacklist'])
-      ); ?></textarea>
-						<p class="description"><?php esc_html_e(
-      	'These IPs get no access to any route – not even as administrator or through an allowance. One IP or CIDR range per line.',
-      	'wirecore-disable-rest'
-      ); ?></p>
-					</td>
-				</tr>
-			</table>
+     ); ?></label>
+					<textarea id="wirecore-dr-ip-blacklist" name="ip_blacklist" rows="4" class="wc-textarea" aria-describedby="wirecore-dr-ip-blacklist-help"><?php echo esc_textarea(
+     	implode("\n", $settings['ip_blacklist'])
+     ); ?></textarea>
+					<span class="wc-field-helper-text" id="wirecore-dr-ip-blacklist-help"><?php esc_html_e(
+     	'These IPs get no access to any route – not even as administrator or through an allowance. One IP or CIDR range per line.',
+     	'wirecore-disable-rest'
+     ); ?></span>
+				</div>
+			</section>
 
-			<h2><?php esc_html_e('Automatic allowances', 'wirecore-disable-rest'); ?></h2>
-			<p class="description"><?php esc_html_e(
-   	'These plugins need the REST API for visitors on the front end (forms, cart, statistics). Their namespaces are public as long as no custom rule is set for the namespace or the route in the route list. The setting has no effect for plugins that are not installed.',
-   	'wirecore-disable-rest'
-   ); ?></p>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><?php esc_html_e('Allow', 'wirecore-disable-rest'); ?></th>
-					<td>
-						<fieldset>
-							<?php foreach (WireCore_DR_Settings::known_namespaces() as $key => $known): ?>
-								<label><input type="checkbox" name="auto_allow[]" value="<?php echo esc_attr(
-        	$key
-        ); ?>"<?php checked(
-	in_array($key, $settings['auto_allow'], true)
-); ?> /> <?php echo esc_html(
- 	self::known_label($key)
- ); ?> <code><?php echo esc_html(
- 	implode(', ', (array) $known)
- ); ?></code></label><br />
-							<?php endforeach; ?>
-						</fieldset>
-					</td>
-				</tr>
-			</table>
+			<section class="wc-card">
+				<?php self::card_header(
+    	__('Automatic allowances', 'wirecore-disable-rest'),
+    	__(
+    		'These plugins need the REST API for visitors on the front end (forms, cart, statistics). Their namespaces are public as long as no custom rule is set for the namespace or the route in the route list. The setting has no effect for plugins that are not installed.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?>
+				<fieldset class="wc-checkbox-group">
+					<legend class="wc-checkbox-group-label"><?php esc_html_e(
+     	'Allow',
+     	'wirecore-disable-rest'
+     ); ?></legend>
+					<div class="wc-checkbox-group-items">
+						<?php foreach (WireCore_DR_Settings::known_namespaces() as $key => $known) {
+      	self::checkbox(
+      		['name' => 'auto_allow[]', 'value' => $key],
+      		in_array($key, $settings['auto_allow'], true),
+      		self::known_label($key),
+      		'',
+      		implode(', ', (array) $known)
+      	);
+      } ?>
+					</div>
+				</fieldset>
+			</section>
 
-			<h2><?php esc_html_e('Error response', 'wirecore-disable-rest'); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><label for="wirecore-dr-error-message"><?php esc_html_e(
+			<section class="wc-card">
+				<?php self::card_header(__('Error response', 'wirecore-disable-rest')); ?>
+				<div class="wc-field">
+					<label class="wc-field-label" for="wirecore-dr-error-message"><?php esc_html_e(
      	'Error message',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td><input type="text" id="wirecore-dr-error-message" name="error_message" class="large-text" value="<?php echo esc_attr(
-     	$settings['error_message']
-     ); ?>" placeholder="<?php esc_attr_e(
+     ); ?></label>
+					<div class="wc-input">
+						<input type="text" id="wirecore-dr-error-message" name="error_message" class="wc-input-control" value="<?php echo esc_attr(
+      	$settings['error_message']
+      ); ?>" placeholder="<?php esc_attr_e(
 	'Access to the REST API is restricted.',
 	'wirecore-disable-rest'
-); ?>" /></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wirecore-dr-error-status"><?php esc_html_e(
+); ?>" />
+					</div>
+				</div>
+				<div class="wc-field wirecore-dr-narrow">
+					<label class="wc-field-label" for="wirecore-dr-error-status"><?php esc_html_e(
      	'Status code',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td>
-						<select id="wirecore-dr-error-status" name="error_status">
+     ); ?></label>
+					<span class="wc-native-select">
+						<select class="wc-native-select-select" id="wirecore-dr-error-status" name="error_status">
 							<option value="401"<?php selected(
        	$settings['error_status'],
        	401
@@ -1115,45 +1355,44 @@ class WireCore_DR_Admin
 	'wirecore-disable-rest'
 ); ?></option>
 						</select>
-					</td>
-				</tr>
-			</table>
+						<?php self::icon('chevron-down', 'wc-native-select-icon'); ?>
+					</span>
+				</div>
+			</section>
 
-			<h2><?php esc_html_e('Hardening', 'wirecore-disable-rest'); ?></h2>
-			<table class="form-table" role="presentation">
-				<?php foreach ($flags as $flag => $labels): ?>
-					<tr>
-						<th scope="row"><?php echo esc_html($labels[0]); ?></th>
-						<td><label><input type="checkbox" name="<?php echo esc_attr(
-      	$flag
-      ); ?>" value="1"<?php checked(
-	$settings[$flag]
-); ?> /> <?php echo esc_html($labels[1]); ?></label></td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
+			<section class="wc-card">
+				<?php self::card_header(__('Hardening', 'wirecore-disable-rest')); ?>
+				<div class="wirecore-dr-stack">
+					<?php foreach ($flags as $flag => $labels) {
+     	self::checkbox(
+     		['name' => $flag, 'value' => '1'],
+     		$settings[$flag],
+     		$labels[1],
+     		$labels[0]
+     	);
+     } ?>
+				</div>
+			</section>
 
-			<h2><?php esc_html_e('Log', 'wirecore-disable-rest'); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><?php esc_html_e('Logging', 'wirecore-disable-rest'); ?></th>
-					<td><label><input type="checkbox" name="log_enabled" value="1"<?php checked(
-     	$settings['log_enabled']
-     ); ?> /> <?php echo esc_html(
- 	sprintf(
- 		/* translators: %d: number of log entries */
- 		__('Log blocked requests (last %d)', 'wirecore-disable-rest'),
- 		WireCore_DR_Log::LIMIT
- 	)
- ); ?></label></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wirecore-dr-log-ip"><?php esc_html_e(
+			<section class="wc-card">
+				<?php self::card_header(__('Log', 'wirecore-disable-rest')); ?>
+				<?php self::checkbox(
+    	['name' => 'log_enabled', 'value' => '1'],
+    	$settings['log_enabled'],
+    	sprintf(
+    		/* translators: %d: number of log entries */
+    		__('Log blocked requests (last %d)', 'wirecore-disable-rest'),
+    		WireCore_DR_Log::LIMIT
+    	),
+    	__('Logging', 'wirecore-disable-rest')
+    ); ?>
+				<div class="wc-field wirecore-dr-narrow">
+					<label class="wc-field-label" for="wirecore-dr-log-ip"><?php esc_html_e(
      	'IP address in log',
      	'wirecore-disable-rest'
-     ); ?></label></th>
-					<td>
-						<select id="wirecore-dr-log-ip" name="log_ip">
+     ); ?></label>
+					<span class="wc-native-select">
+						<select class="wc-native-select-select" id="wirecore-dr-log-ip" name="log_ip" aria-describedby="wirecore-dr-log-ip-help">
 							<option value="full"<?php selected(
        	$settings['log_ip'],
        	'full'
@@ -1176,15 +1415,21 @@ class WireCore_DR_Admin
 	'wirecore-disable-rest'
 ); ?></option>
 						</select>
-						<p class="description"><?php esc_html_e(
-      	'Applies to new entries. Existing entries remain unchanged until the log is cleared.',
-      	'wirecore-disable-rest'
-      ); ?></p>
-					</td>
-				</tr>
-			</table>
+						<?php self::icon('chevron-down', 'wc-native-select-icon'); ?>
+					</span>
+					<span class="wc-field-helper-text" id="wirecore-dr-log-ip-help"><?php esc_html_e(
+     	'Applies to new entries. Existing entries remain unchanged until the log is cleared.',
+     	'wirecore-disable-rest'
+     ); ?></span>
+				</div>
+			</section>
 
-			<?php submit_button(); ?>
+			<div class="wirecore-dr-row">
+				<button type="submit" class="wc-button"><?php esc_html_e(
+    	'Save settings',
+    	'wirecore-disable-rest'
+    ); ?></button>
+			</div>
 		</form>
 		<?php
 	}
@@ -1197,61 +1442,96 @@ class WireCore_DR_Admin
 		$labels['denied'] = __('Deny list', 'wirecore-disable-rest');
 		$format = get_option('date_format') . ' ' . get_option('time_format');
 		?>
-		<?php if (!WireCore_DR_Settings::get()['log_enabled']): ?>
-			<div class="notice notice-info inline">
-				<p><?php esc_html_e(
-    	'The log is disabled. It can be enabled under “Settings”.',
-    	'wirecore-disable-rest'
-    ); ?></p>
+		<?php if (!WireCore_DR_Settings::get()['log_enabled']) {
+  	self::alert(
+  		'info',
+  		__(
+  			'The log is disabled. It can be enabled under “Settings”.',
+  			'wirecore-disable-rest'
+  		)
+  	);
+  } ?>
+
+		<section class="wc-card">
+			<?php self::card_header(
+   	__('Log', 'wirecore-disable-rest'),
+   	sprintf(
+   		/* translators: %d: number of blocked requests */
+   		__('Blocked requests in total: %d', 'wirecore-disable-rest'),
+   		$log['count']
+   	)
+   ); ?>
+			<div class="wc-data-table-scroll">
+				<table class="wc-data-table-table">
+					<thead>
+						<tr class="wc-data-table-head-row">
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'Time',
+       	'wirecore-disable-rest'
+       ); ?></th>
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'Method',
+       	'wirecore-disable-rest'
+       ); ?></th>
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'Route',
+       	'wirecore-disable-rest'
+       ); ?></th>
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'IP',
+       	'wirecore-disable-rest'
+       ); ?></th>
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'User ID',
+       	'wirecore-disable-rest'
+       ); ?></th>
+							<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+       	'Rule',
+       	'wirecore-disable-rest'
+       ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php if (!$log['entries']): ?>
+							<tr class="wc-data-table-row"><td class="wc-data-table-td" colspan="6"><?php esc_html_e(
+       	'No entries.',
+       	'wirecore-disable-rest'
+       ); ?></td></tr>
+						<?php endif; ?>
+						<?php foreach ($log['entries'] as $entry): ?>
+							<tr class="wc-data-table-row">
+								<td class="wc-data-table-td"><?php echo esc_html(
+        	wp_date($format, $entry['time'])
+        ); ?></td>
+								<td class="wc-data-table-td"><?php echo esc_html($entry['method']); ?></td>
+								<td class="wc-data-table-td"><code class="wc-inline-code"><?php echo esc_html(
+        	$entry['route']
+        ); ?></code></td>
+								<td class="wc-data-table-td"><?php echo $entry['ip'] !== ''
+        	? esc_html($entry['ip'])
+        	: '–'; ?></td>
+								<td class="wc-data-table-td"><?php echo $entry['user']
+        	? esc_html($entry['user'])
+        	: '–'; ?></td>
+								<td class="wc-data-table-td"><?php echo esc_html(
+        	$labels[$entry['reason']] ?? $entry['reason']
+        ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
 			</div>
-		<?php endif; ?>
-
-		<p><?php echo esc_html(
-  	sprintf(
-  		/* translators: %d: number of blocked requests */
-  		__('Blocked requests in total: %d', 'wirecore-disable-rest'),
-  		$log['count']
-  	)
-  ); ?></p>
-
-		<table class="widefat striped">
-			<thead>
-				<tr>
-					<th><?php esc_html_e('Time', 'wirecore-disable-rest'); ?></th>
-					<th><?php esc_html_e('Method', 'wirecore-disable-rest'); ?></th>
-					<th><?php esc_html_e('Route', 'wirecore-disable-rest'); ?></th>
-					<th><?php esc_html_e('IP', 'wirecore-disable-rest'); ?></th>
-					<th><?php esc_html_e('User ID', 'wirecore-disable-rest'); ?></th>
-					<th><?php esc_html_e('Rule', 'wirecore-disable-rest'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if (!$log['entries']): ?>
-					<tr><td colspan="6"><?php esc_html_e(
-     	'No entries.',
-     	'wirecore-disable-rest'
-     ); ?></td></tr>
-				<?php endif; ?>
-				<?php foreach ($log['entries'] as $entry): ?>
-					<tr>
-						<td><?php echo esc_html(wp_date($format, $entry['time'])); ?></td>
-						<td><?php echo esc_html($entry['method']); ?></td>
-						<td><code><?php echo esc_html($entry['route']); ?></code></td>
-						<td><?php echo $entry['ip'] !== '' ? esc_html($entry['ip']) : '–'; ?></td>
-						<td><?php echo $entry['user'] ? esc_html($entry['user']) : '–'; ?></td>
-						<td><?php echo esc_html($labels[$entry['reason']] ?? $entry['reason']); ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-
-		<form method="post" action="<?php echo esc_url(
-  	admin_url('admin-post.php')
-  ); ?>">
-			<input type="hidden" name="action" value="wirecore_dr_log_clear" />
-			<?php wp_nonce_field('wirecore_dr_log_clear'); ?>
-			<?php submit_button(__('Clear log', 'wirecore-disable-rest'), 'secondary'); ?>
-		</form>
+			<form method="post" action="<?php echo esc_url(
+   	admin_url('admin-post.php')
+   ); ?>" class="wc-card-parts-footer">
+				<input type="hidden" name="action" value="wirecore_dr_log_clear" />
+				<?php wp_nonce_field('wirecore_dr_log_clear'); ?>
+				<button type="submit" class="wc-button wc-button-outline wc-button-sm"><?php esc_html_e(
+    	'Clear log',
+    	'wirecore-disable-rest'
+    ); ?></button>
+			</form>
+		</section>
 		<?php
 	}
 
@@ -1267,124 +1547,154 @@ class WireCore_DR_Admin
 				'wirecore_dr_selftest'
 			);
 		?>
-		<h2><?php esc_html_e('Self-test', 'wirecore-disable-rest'); ?></h2>
-		<p><?php esc_html_e(
-  	'Calls the REST API without authentication and shows what logged-out visitors see.',
-  	'wirecore-disable-rest'
-  ); ?></p>
-		<p><a class="button" href="<?php echo esc_url(
-  	wp_nonce_url(
-  		add_query_arg('selftest', 1, self::tab_url('tools')),
-  		'wirecore_dr_selftest'
-  	)
-  ); ?>"><?php esc_html_e('Run test', 'wirecore-disable-rest'); ?></a></p>
-		<?php if ($selftest): ?>
-			<table class="widefat striped">
-				<thead>
-					<tr>
-						<th><?php esc_html_e('URL', 'wirecore-disable-rest'); ?></th>
-						<th><?php esc_html_e('Status', 'wirecore-disable-rest'); ?></th>
-						<th><?php esc_html_e('Response', 'wirecore-disable-rest'); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach (
-     	[rest_url(), rest_url('wp/v2/users'), rest_url('wp/v2/posts')]
-     	as $url
-     ):
-     	$response = wp_remote_get($url, [
-     		'timeout' => 10,
-     		'sslverify' => $sslverify,
-     	]); ?>
-						<tr>
-							<td><code><?php echo esc_html($url); ?></code></td>
-							<?php if (is_wp_error($response)): ?>
-								<td>–</td>
-								<td><?php echo esc_html($response->get_error_message()); ?></td>
-							<?php else: ?>
-								<td><?php echo esc_html(wp_remote_retrieve_response_code($response)); ?></td>
-								<td><code><?php echo esc_html(
-        	mb_strimwidth(wp_remote_retrieve_body($response), 0, 200, '…')
-        ); ?></code></td>
-							<?php endif; ?>
-						</tr>
-					<?php
-     endforeach; ?>
-				</tbody>
-			</table>
-		<?php endif; ?>
-
-		<h2><?php esc_html_e('Export', 'wirecore-disable-rest'); ?></h2>
-		<form method="post" action="<?php echo esc_url(
-  	admin_url('admin-post.php')
-  ); ?>">
-			<input type="hidden" name="action" value="wirecore_dr_export" />
-			<?php wp_nonce_field('wirecore_dr_export'); ?>
-			<?php submit_button(
-   	__('Export settings', 'wirecore-disable-rest'),
-   	'secondary',
-   	'submit',
-   	false
+		<section class="wc-card">
+			<?php self::card_header(
+   	__('Self-test', 'wirecore-disable-rest'),
+   	__(
+   		'Calls the REST API without authentication and shows what logged-out visitors see.',
+   		'wirecore-disable-rest'
+   	)
    ); ?>
-		</form>
+			<?php if ($selftest): ?>
+				<div class="wc-data-table-scroll">
+					<table class="wc-data-table-table">
+						<thead>
+							<tr class="wc-data-table-head-row">
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'URL',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Status',
+        	'wirecore-disable-rest'
+        ); ?></th>
+								<th scope="col" class="wc-data-table-th"><?php esc_html_e(
+        	'Response',
+        	'wirecore-disable-rest'
+        ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach (
+       	[rest_url(), rest_url('wp/v2/users'), rest_url('wp/v2/posts')]
+       	as $url
+       ):
+       	$response = wp_remote_get($url, [
+       		'timeout' => 10,
+       		'sslverify' => $sslverify,
+       	]); ?>
+								<tr class="wc-data-table-row">
+									<td class="wc-data-table-td"><code class="wc-inline-code"><?php echo esc_html(
+         	$url
+         ); ?></code></td>
+									<?php if (is_wp_error($response)): ?>
+										<td class="wc-data-table-td">–</td>
+										<td class="wc-data-table-td"><?php echo esc_html(
+          	$response->get_error_message()
+          ); ?></td>
+									<?php else: ?>
+										<td class="wc-data-table-td"><?php echo esc_html(
+          	wp_remote_retrieve_response_code($response)
+          ); ?></td>
+										<td class="wc-data-table-td"><code class="wc-inline-code"><?php echo esc_html(
+          	mb_strimwidth(wp_remote_retrieve_body($response), 0, 200, '…')
+          ); ?></code></td>
+									<?php endif; ?>
+								</tr>
+							<?php
+       endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			<?php endif; ?>
+			<div class="wc-card-parts-footer">
+				<a class="wc-button wc-button-outline wc-button-sm" href="<?php echo esc_url(
+    	wp_nonce_url(
+    		add_query_arg('selftest', 1, self::tab_url('tools')),
+    		'wirecore_dr_selftest'
+    	)
+    ); ?>"><?php esc_html_e('Run test', 'wirecore-disable-rest'); ?></a>
+			</div>
+		</section>
 
-		<h2><?php esc_html_e('Import', 'wirecore-disable-rest'); ?></h2>
-		<p><?php esc_html_e(
-  	'Replaces all current settings with those from the file.',
-  	'wirecore-disable-rest'
-  ); ?></p>
-		<form method="post" action="<?php echo esc_url(
-  	admin_url('admin-post.php')
-  ); ?>" enctype="multipart/form-data">
-			<input type="hidden" name="action" value="wirecore_dr_import" />
-			<?php wp_nonce_field('wirecore_dr_import'); ?>
-			<input type="file" name="import_file" accept=".json,application/json" required />
-			<?php submit_button(
-   	__('Import settings', 'wirecore-disable-rest'),
-   	'secondary',
-   	'submit',
-   	false
+		<section class="wc-card">
+			<?php self::card_header(__('Export', 'wirecore-disable-rest')); ?>
+			<form method="post" action="<?php echo esc_url(
+   	admin_url('admin-post.php')
+   ); ?>" class="wc-card-parts-footer">
+				<input type="hidden" name="action" value="wirecore_dr_export" />
+				<?php wp_nonce_field('wirecore_dr_export'); ?>
+				<button type="submit" class="wc-button wc-button-outline wc-button-sm"><?php esc_html_e(
+    	'Export settings',
+    	'wirecore-disable-rest'
+    ); ?></button>
+			</form>
+		</section>
+
+		<section class="wc-card">
+			<?php self::card_header(
+   	__('Import', 'wirecore-disable-rest'),
+   	__(
+   		'Replaces all current settings with those from the file.',
+   		'wirecore-disable-rest'
+   	)
    ); ?>
-		</form>
+			<form method="post" action="<?php echo esc_url(
+   	admin_url('admin-post.php')
+   ); ?>" enctype="multipart/form-data" class="wc-card-parts-footer">
+				<input type="hidden" name="action" value="wirecore_dr_import" />
+				<?php wp_nonce_field('wirecore_dr_import'); ?>
+				<input type="file" name="import_file" accept=".json,application/json" required aria-label="<?php esc_attr_e(
+    	'Import',
+    	'wirecore-disable-rest'
+    ); ?>" />
+				<button type="submit" class="wc-button wc-button-outline wc-button-sm"><?php esc_html_e(
+    	'Import settings',
+    	'wirecore-disable-rest'
+    ); ?></button>
+			</form>
+		</section>
 
-		<h2><?php esc_html_e('Emergency switch', 'wirecore-disable-rest'); ?></h2>
-		<p><?php esc_html_e(
-  	'If a rule locks you out of the admin area, this line in wp-config.php disables all rules:',
-  	'wirecore-disable-rest'
-  ); ?></p>
-		<p><code>define('WIRECORE_DR_OFF', true);</code></p>
+		<section class="wc-card">
+			<?php self::card_header(
+   	__('Emergency switch', 'wirecore-disable-rest'),
+   	__(
+   		'If a rule locks you out of the admin area, this line in wp-config.php disables all rules:',
+   		'wirecore-disable-rest'
+   	)
+   ); ?>
+			<p><code class="wc-inline-code">define('WIRECORE_DR_OFF', true);</code></p>
+		</section>
 
-		<h2><?php esc_html_e('For developers', 'wirecore-disable-rest'); ?></h2>
-		<ul class="ul-disc">
-			<li><?php echo wp_kses(
-   	__(
-   		'<code>wirecore_dr_error</code> – filters the WP_Error of a blocked request (parameters: error, route pattern, method). If the filter returns <code>true</code>, the request is allowed after all.',
-   		'wirecore-disable-rest'
-   	),
-   	['code' => []]
-   ); ?></li>
-			<li><?php echo wp_kses(
-   	__(
-   		'<code>wirecore_dr_client_ip</code> – filters the client IP, e.g. behind a proxy.',
-   		'wirecore-disable-rest'
-   	),
-   	['code' => []]
-   ); ?></li>
-			<li><?php echo wp_kses(
-   	__(
-   		'<code>wirecore_dr_known_namespaces</code> – filters the plugins under “Automatic allowances” (array <code>key =&gt; [namespaces]</code>). New entries appear there as a checkbox and can be enabled.',
-   		'wirecore-disable-rest'
-   	),
-   	['code' => []]
-   ); ?></li>
-			<li><?php echo wp_kses(
-   	__(
-   		'WP-CLI: <code>wp wirecore-dr</code> (status, routes, set, default, export, import, log).',
-   		'wirecore-disable-rest'
-   	),
-   	['code' => []]
-   ); ?></li>
-		</ul>
+		<section class="wc-card">
+			<?php self::card_header(__('For developers', 'wirecore-disable-rest')); ?>
+			<ul class="wirecore-dr-list">
+				<li><?php self::code_text(
+    	__(
+    		'<code>wirecore_dr_error</code> – filters the WP_Error of a blocked request (parameters: error, route pattern, method). If the filter returns <code>true</code>, the request is allowed after all.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?></li>
+				<li><?php self::code_text(
+    	__(
+    		'<code>wirecore_dr_client_ip</code> – filters the client IP, e.g. behind a proxy.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?></li>
+				<li><?php self::code_text(
+    	__(
+    		'<code>wirecore_dr_known_namespaces</code> – filters the plugins under “Automatic allowances” (array <code>key =&gt; [namespaces]</code>). New entries appear there as a checkbox and can be enabled.',
+    		'wirecore-disable-rest'
+    	)
+    ); ?></li>
+				<li><?php self::code_text(
+    	__(
+    		'WP-CLI: <code>wp wirecore-dr</code> (status, routes, set, default, export, import, log).',
+    		'wirecore-disable-rest'
+    	)
+    ); ?></li>
+			</ul>
+		</section>
 		<?php
 	}
 }
