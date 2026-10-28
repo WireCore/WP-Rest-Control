@@ -8,9 +8,9 @@ if (!defined('ABSPATH')) {
  * The most recently blocked requests. Disabled by default, because every
  * blocked request causes a database write.
  */
-class WireCore_DR_Log
+class WireCore_RC_Log
 {
-	const OPTION = 'wirecore_dr_log';
+	const OPTION = 'wirecore_rc_log';
 	const LIMIT = 200;
 
 	public static function get()
@@ -24,10 +24,10 @@ class WireCore_DR_Log
 
 	public static function add(array $entry)
 	{
-		if (!WireCore_DR_Settings::get()['log_enabled']) {
+		if (!WireCore_RC_Settings::get()['log_enabled']) {
 			return;
 		}
-		$mode = WireCore_DR_Settings::get()['log_ip'];
+		$mode = WireCore_RC_Settings::get()['log_ip'];
 		if ($mode === 'none') {
 			$entry['ip'] = '';
 		} elseif ($mode === 'anonymized' && $entry['ip'] !== '') {

@@ -5,16 +5,16 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Manages the REST API restrictions of WireCore Disable REST.
+ * Manages the REST API restrictions of WireCore REST Control.
  */
-class WireCore_DR_Cli
+class WireCore_RC_Cli
 {
 	/**
 	 * Shows the default rule, the number of custom rules and the main switches.
 	 */
 	public function status()
 	{
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 		WP_CLI::log(
 			sprintf(
 				'Default: read=%s, write=%s',
@@ -46,19 +46,19 @@ class WireCore_DR_Cli
 				'Automatically allowed: %s',
 				implode(
 					', ',
-					WireCore_DR_Settings::auto_allowed_namespaces()
+					WireCore_RC_Settings::auto_allowed_namespaces()
 				) ?:
 				'-'
 			)
 		);
-		foreach (WireCore_DR_Settings::FLAGS as $flag) {
+		foreach (WireCore_RC_Settings::FLAGS as $flag) {
 			WP_CLI::log(
 				sprintf('%s: %s', $flag, $settings[$flag] ? 'on' : 'off')
 			);
 		}
 		WP_CLI::log(sprintf('log_ip: %s', $settings['log_ip']));
-		if (defined('WIRECORE_DR_OFF') && WIRECORE_DR_OFF) {
-			WP_CLI::warning('WIRECORE_DR_OFF is set, no rules are enforced.');
+		if (defined('WIRECORE_RC_OFF') && WIRECORE_RC_OFF) {
+			WP_CLI::warning('WIRECORE_RC_OFF is set, no rules are enforced.');
 		}
 	}
 
@@ -86,7 +86,7 @@ class WireCore_DR_Cli
 	public function routes($args, $assoc_args)
 	{
 		$items = [];
-		foreach (WireCore_DR_Routes::all() as $namespace => $data) {
+		foreach (WireCore_RC_Routes::all() as $namespace => $data) {
 			if (
 				isset($assoc_args['namespace']) &&
 				$assoc_args['namespace'] !== $namespace
@@ -106,10 +106,10 @@ class WireCore_DR_Cli
 					'methods' => implode(',', $info['methods']),
 					'source' => $info['source'],
 					'read' => $info['read']
-						? WireCore_DR_Guard::rule($route, $namespace, 'GET')
+						? WireCore_RC_Guard::rule($route, $namespace, 'GET')
 						: '-',
 					'write' => $info['write']
-						? WireCore_DR_Guard::rule($route, $namespace, 'POST')
+						? WireCore_RC_Guard::rule($route, $namespace, 'POST')
 						: '-',
 				];
 			}
@@ -140,16 +140,16 @@ class WireCore_DR_Cli
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wirecore-dr set contact-form-7/v1 --read=public --write=public
-	 *     wp wirecore-dr set /wp/v2/users --read=admin --write=admin
-	 *     wp wirecore-dr set /wp/v2/users --read=inherit --write=inherit
+	 *     wp wirecore-rest set contact-form-7/v1 --read=public --write=public
+	 *     wp wirecore-rest set /wp/v2/users --read=admin --write=admin
+	 *     wp wirecore-rest set /wp/v2/users --read=inherit --write=inherit
 	 */
 	public function set($args, $assoc_args)
 	{
 		$target = $args[0];
 		$scope = strpos($target, '/') === 0 ? 'routes' : 'namespaces';
 
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 		$rules = $settings[$scope][$target] ?? [
 			'read' => 'inherit',
 			'write' => 'inherit',
@@ -160,7 +160,7 @@ class WireCore_DR_Cli
 			}
 		}
 		$settings[$scope][$target] = $rules;
-		WireCore_DR_Settings::save($settings);
+		WireCore_RC_Settings::save($settings);
 
 		$server = rest_get_server();
 		$known =
@@ -200,7 +200,7 @@ class WireCore_DR_Cli
 	 */
 	public function set_default($args, $assoc_args)
 	{
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 		foreach (['read', 'write'] as $group) {
 			if (isset($assoc_args[$group])) {
 				$settings['default'][$group] = self::rule_arg(
@@ -209,7 +209,7 @@ class WireCore_DR_Cli
 				);
 			}
 		}
-		WireCore_DR_Settings::save($settings);
+		WireCore_RC_Settings::save($settings);
 		WP_CLI::success(
 			sprintf(
 				'Default: read=%s, write=%s',
@@ -230,7 +230,7 @@ class WireCore_DR_Cli
 	public function export($args)
 	{
 		$json = wp_json_encode(
-			WireCore_DR_Settings::export(),
+			WireCore_RC_Settings::export(),
 			JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 		);
 		if (!isset($args[0])) {
@@ -256,7 +256,7 @@ class WireCore_DR_Cli
 		if (!is_readable($args[0])) {
 			WP_CLI::error(sprintf('Cannot read "%s".', $args[0]));
 		}
-		$result = WireCore_DR_Settings::import(file_get_contents($args[0]));
+		$result = WireCore_RC_Settings::import(file_get_contents($args[0]));
 		if (is_wp_error($result)) {
 			WP_CLI::error($result);
 		}
@@ -284,11 +284,11 @@ class WireCore_DR_Cli
 	public function log($args, $assoc_args)
 	{
 		if (!empty($assoc_args['clear'])) {
-			WireCore_DR_Log::clear();
+			WireCore_RC_Log::clear();
 			WP_CLI::success('Log cleared.');
 			return;
 		}
-		$log = WireCore_DR_Log::get();
+		$log = WireCore_RC_Log::get();
 		$items = array_map(function ($entry) {
 			$entry['time'] = wp_date('Y-m-d H:i:s', $entry['time']);
 			return $entry;
@@ -308,7 +308,7 @@ class WireCore_DR_Cli
 
 	private static function rule_arg($rule, $allow_inherit)
 	{
-		$rules = WireCore_DR_Settings::RULES;
+		$rules = WireCore_RC_Settings::RULES;
 		if (!$allow_inherit) {
 			$rules = array_diff($rules, ['inherit']);
 		}

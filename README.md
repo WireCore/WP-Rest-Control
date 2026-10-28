@@ -1,8 +1,8 @@
-# WireCore Disable REST
+# WireCore REST Control
 
 Disable the WordPress REST API selectively – per namespace, route and HTTP method, including the routes of other plugins, with IP, role and user exceptions.
 
-Instead of an all-or-nothing switch, WireCore Disable REST lists **every registered REST route** (core, themes and all plugins), shows which plugin or theme registered it, and lets you decide per namespace and per route who may read and who may write.
+Instead of an all-or-nothing switch, WireCore REST Control lists **every registered REST route** (core, themes and all plugins), shows which plugin or theme registered it, and lets you decide per namespace and per route who may read and who may write.
 
 The user-facing description lives in [`readme.txt`](readme.txt), which is also shown on wordpress.org.
 
@@ -22,12 +22,12 @@ Requires WordPress 5.8+ and PHP 7.4+.
 
 ## Installation
 
-From the WordPress plugin directory: _Plugins → Add New → "WireCore Disable REST"_.
+From the WordPress plugin directory: _Plugins → Add New → "WireCore REST Control"_.
 
 With Composer via [WPackagist](https://wpackagist.org/):
 
 ```bash
-composer require wpackagist-plugin/wirecore-disable-rest
+composer require wpackagist-plugin/wirecore-rest-control
 ```
 
 After activation, logged-out visitors can no longer use the REST API, except for the automatically allowed namespaces. The settings are under _Settings → REST API_.
@@ -37,19 +37,19 @@ After activation, logged-out visitors can no longer use the REST API, except for
 If a rule locks you out, add this to `wp-config.php` – no rule is enforced while it is set:
 
 ```php
-define('WIRECORE_DR_OFF', true);
+define('WIRECORE_RC_OFF', true);
 ```
 
 ## WP-CLI
 
 ```bash
-wp wirecore-dr status
-wp wirecore-dr routes [--namespace=<namespace>] [--source=<text>] [--format=table|json|csv]
-wp wirecore-dr set <route|namespace> [--read=<rule>] [--write=<rule>]
-wp wirecore-dr default [--read=<rule>] [--write=<rule>]
-wp wirecore-dr export [<file>]
-wp wirecore-dr import <file>
-wp wirecore-dr log [--clear] [--format=table|json|csv]
+wp wirecore-rest status
+wp wirecore-rest routes [--namespace=<namespace>] [--source=<text>] [--format=table|json|csv]
+wp wirecore-rest set <route|namespace> [--read=<rule>] [--write=<rule>]
+wp wirecore-rest default [--read=<rule>] [--write=<rule>]
+wp wirecore-rest export [<file>]
+wp wirecore-rest import <file>
+wp wirecore-rest log [--clear] [--format=table|json|csv]
 ```
 
 Rules: `inherit`, `public`, `auth`, `admin`, `blocked` (`inherit` is not allowed for the default).
@@ -58,9 +58,9 @@ Rules: `inherit`, `public`, `auth`, `admin`, `blocked` (`inherit` is not allowed
 
 | Filter                         | Parameters                                       | Purpose                                                                     |
 | ------------------------------ | ------------------------------------------------ | --------------------------------------------------------------------------- |
-| `wirecore_dr_error`            | `WP_Error $error, string $route, string $method` | Change the error of a blocked request. Returning `true` allows the request. |
-| `wirecore_dr_client_ip`        | `string $ip`                                     | Determine the client IP, e.g. behind a reverse proxy.                       |
-| `wirecore_dr_known_namespaces` | `array $known`                                   | Plugins offered under "Automatic allowances" (`key => [namespaces]`).       |
+| `wirecore_rc_error`            | `WP_Error $error, string $route, string $method` | Change the error of a blocked request. Returning `true` allows the request. |
+| `wirecore_rc_client_ip`        | `string $ip`                                     | Determine the client IP, e.g. behind a reverse proxy.                       |
+| `wirecore_rc_known_namespaces` | `array $known`                                   | Plugins offered under "Automatic allowances" (`key => [namespaces]`).       |
 
 ## Development
 
@@ -71,12 +71,12 @@ docker compose up -d   # WordPress on http://localhost:8092, phpMyAdmin on :8093
 npm install            # Prettier with the PHP plugin, @wirecore/wirelayer-css
 ```
 
-The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) components (`.wc-*` classes). `npm run build:css` writes the components listed in `package.json`, scoped to `#wirecore-dr`, with their fonts to `assets/wirelayer/`. The output is committed, so the plugin needs no build step; run the command again after adding a component or updating `@wirecore/wirelayer-css`.
+The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) components (`.wc-*` classes). `npm run build:css` writes the components listed in `package.json`, scoped to `#wirecore-rc`, with their fonts to `assets/wirelayer/`. The output is committed, so the plugin needs no build step; run the command again after adding a component or updating `@wirecore/wirelayer-css`.
 
 WP-CLI is available in the container:
 
 ```bash
-docker compose exec wordpress wp --allow-root wirecore-dr routes
+docker compose exec wordpress wp --allow-root wirecore-rest routes
 ```
 
 The self-test under _Tools_ does not work locally, because the container cannot reach `localhost:8092`.
@@ -88,7 +88,7 @@ The self-test under _Tools_ does not work locally, because the container cannot 
 
     ```bash
     docker compose exec wordpress wp --allow-root plugin install plugin-check --activate
-    docker compose exec wordpress wp --allow-root plugin check wirecore-disable-rest \
+    docker compose exec wordpress wp --allow-root plugin check wirecore-rest-control \
         --exclude-directories=node_modules,db-data,.vscode,.github,vendor,tests \
         --exclude-files=.gitignore,.gitattributes,.distignore,.prettierrc,.prettierignore,CLAUDE.md,README.md,CHANGELOG.md,SECURITY.md
     ```
@@ -100,18 +100,18 @@ PHPUnit integration tests run against the WordPress test suite (`wp-phpunit`, Wo
 ```bash
 docker run --rm -u "$(id -u):$(id -g)" -v "$PWD":/app -w /app composer:2 composer install
 docker compose exec db mariadb -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS wordpress_test"
-docker compose exec -w /var/www/html/wp-content/plugins/wirecore-disable-rest wordpress vendor/bin/phpunit
+docker compose exec -w /var/www/html/wp-content/plugins/wirecore-rest-control wordpress vendor/bin/phpunit
 ```
 
 The database settings in [`tests/wp-tests-config.php`](tests/wp-tests-config.php) default to the Docker environment and can be overridden with `WP_TESTS_DB_HOST`, `WP_TESTS_DB_USER`, `WP_TESTS_DB_PASSWORD` and `WP_TESTS_DB_NAME`.
 
 ### Translations
 
-All UI strings are English in the code (text domain `wirecore-disable-rest`) and translated in `languages/`. After changing strings (`P=wp-content/plugins/wirecore-disable-rest`):
+All UI strings are English in the code (text domain `wirecore-rest-control`) and translated in `languages/`. After changing strings (`P=wp-content/plugins/wirecore-rest-control`):
 
 ```bash
-docker compose exec wordpress wp --allow-root i18n make-pot $P $P/languages/wirecore-disable-rest.pot --domain=wirecore-disable-rest --exclude=node_modules,db-data,languages
-docker compose exec wordpress wp --allow-root i18n update-po $P/languages/wirecore-disable-rest.pot $P/languages
+docker compose exec wordpress wp --allow-root i18n make-pot $P $P/languages/wirecore-rest-control.pot --domain=wirecore-rest-control --exclude=node_modules,db-data,languages
+docker compose exec wordpress wp --allow-root i18n update-po $P/languages/wirecore-rest-control.pot $P/languages
 # translate new or changed entries in both .po files, then:
 docker compose exec wordpress wp --allow-root i18n make-mo $P/languages
 docker compose exec wordpress wp --allow-root i18n make-php $P/languages
@@ -133,7 +133,7 @@ Only the files needed by the plugin are shipped. Development files are excluded 
 
 ## Releasing
 
-1. Bump `Version:` in `wirecore-disable-rest.php` and `Stable tag:` in `readme.txt`, and add the changelog entry to `readme.txt` and `CHANGELOG.md`.
+1. Bump `Version:` in `wirecore-rest-control.php` and `Stable tag:` in `readme.txt`, and add the changelog entry to `readme.txt` and `CHANGELOG.md`.
 2. Commit and push to `main`, wait for CI to pass.
 3. Create and push a tag with the version number, without a `v` prefix:
 

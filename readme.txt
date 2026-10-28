@@ -1,4 +1,4 @@
-=== WireCore Disable REST ===
+=== WireCore REST Control ===
 Contributors: wirecore
 Tags: rest api, security, disable rest api, json api, privacy
 Requires at least: 5.8
@@ -12,7 +12,7 @@ Disable the WordPress REST API selectively – per namespace, route and HTTP met
 
 == Description ==
 
-WireCore Disable REST restricts access to the WordPress REST API without breaking the block editor or the plugins your visitors rely on. Instead of an all-or-nothing switch, you decide per namespace and per route who may read and who may write.
+WireCore REST Control restricts access to the WordPress REST API without breaking the block editor or the plugins your visitors rely on. Instead of an all-or-nothing switch, you decide per namespace and per route who may read and who may write.
 
 The route list shows **every registered route** – WordPress core, themes and all other plugins – and tells you which plugin or theme registered it.
 
@@ -57,7 +57,7 @@ Some plugins need the REST API for visitors on the front end. Their namespaces a
 * Optional log of the last 200 blocked requests. The IP address can be stored in full, shortened or not at all.
 * Self-test: shows what logged-out visitors get from the REST API.
 * Export and import of all settings as JSON.
-* WP-CLI: `wp wirecore-dr status|routes|set|default|export|import|log`.
+* WP-CLI: `wp wirecore-rest status|routes|set|default|export|import|log`.
 
 = Coverage =
 
@@ -69,9 +69,9 @@ Settings are stored per site, because every site has its own routes and plugins.
 
 = For developers =
 
-* `wirecore_dr_error` – filters the `WP_Error` of a blocked request (parameters: error, route pattern, method). Returning `true` allows the request after all.
-* `wirecore_dr_client_ip` – filters the client IP, e.g. behind a reverse proxy.
-* `wirecore_dr_known_namespaces` – filters the plugins offered under "Automatic allowances" (array `key => [namespaces]`).
+* `wirecore_rc_error` – filters the `WP_Error` of a blocked request (parameters: error, route pattern, method). Returning `true` allows the request after all.
+* `wirecore_rc_client_ip` – filters the client IP, e.g. behind a reverse proxy.
+* `wirecore_rc_known_namespaces` – filters the plugins offered under "Automatic allowances" (array `key => [namespaces]`).
 
 = Privacy =
 
@@ -79,7 +79,7 @@ The plugin does not send any data to external services and does not set cookies.
 
 = Source code and third-party resources =
 
-The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) component library (MIT). `assets/wirelayer/wirelayer.css` is generated from the npm package `@wirecore/wirelayer-css` with `npm run build:css`; the source code of the plugin, including `package.json`, is available at [github.com/WireCore/WireCore-Disable-REST](https://github.com/WireCore/WireCore-Disable-REST). Bundled with it:
+The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) component library (MIT). `assets/wirelayer/wirelayer.css` is generated from the npm package `@wirecore/wirelayer-css` with `npm run build:css`; the source code of the plugin, including `package.json`, is available at [github.com/WireCore/WP-Rest-Control](https://github.com/WireCore/WP-Rest-Control). Bundled with it:
 
 * Tailwind CSS (MIT) – preflight and utilities compiled into `wirelayer.css`
 * Schibsted Grotesk and JetBrains Mono fonts (SIL Open Font License 1.1, `assets/wirelayer/fonts/OFL.txt`), served from the plugin – no external font service
@@ -91,7 +91,7 @@ The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) co
 2. Activate the plugin. From now on, logged-out visitors can no longer use the REST API, except for the automatically allowed namespaces.
 3. Go to *Settings → REST API* to review the route list and adjust the rules.
 
-With Composer, the plugin can be installed from WPackagist: `composer require wpackagist-plugin/wirecore-disable-rest`.
+With Composer, the plugin can be installed from WPackagist: `composer require wpackagist-plugin/wirecore-rest-control`.
 
 == Frequently Asked Questions ==
 
@@ -99,7 +99,7 @@ With Composer, the plugin can be installed from WPackagist: `composer require wp
 
 Add the following line to your `wp-config.php`. It disables all rules until you remove it again:
 
-`define( 'WIRECORE_DR_OFF', true );`
+`define( 'WIRECORE_RC_OFF', true );`
 
 = Will administrators be blocked? =
 

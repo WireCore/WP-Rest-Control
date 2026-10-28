@@ -1,9 +1,9 @@
 <?php
 /**
- * WireCore_DR_Guard::decide() and ::rule(): rule precedence, rule levels,
+ * WireCore_RC_Guard::decide() and ::rule(): rule precedence, rule levels,
  * allow lists, deny lists and the error response.
  */
-class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
+class Test_WireCore_RC_Guard extends WireCore_RC_TestCase
 {
 	const ROUTE = '/wp/v2/posts';
 	const NS = 'wp/v2';
@@ -15,7 +15,7 @@ class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
 		$route = self::ROUTE,
 		$namespace = self::NS
 	) {
-		return WireCore_DR_Guard::decide(
+		return WireCore_RC_Guard::decide(
 			$route,
 			$namespace,
 			$method,
@@ -38,19 +38,19 @@ class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
 
 		$this->assertSame(
 			'blocked',
-			WireCore_DR_Guard::rule(self::ROUTE, self::NS, 'GET')
+			WireCore_RC_Guard::rule(self::ROUTE, self::NS, 'GET')
 		);
 		$this->assertSame(
 			'public',
-			WireCore_DR_Guard::rule('/wp/v2/pages', self::NS, 'GET')
+			WireCore_RC_Guard::rule('/wp/v2/pages', self::NS, 'GET')
 		);
 		$this->assertSame(
 			'auth',
-			WireCore_DR_Guard::rule(self::ROUTE, self::NS, 'POST')
+			WireCore_RC_Guard::rule(self::ROUTE, self::NS, 'POST')
 		);
 		$this->assertSame(
 			'auth',
-			WireCore_DR_Guard::rule('/other', 'other/v1', 'GET')
+			WireCore_RC_Guard::rule('/other', 'other/v1', 'GET')
 		);
 	}
 
@@ -76,7 +76,7 @@ class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
 		$namespace = 'contact-form-7/v1';
 		$this->assertSame(
 			'public',
-			WireCore_DR_Guard::rule($route, $namespace, 'POST')
+			WireCore_RC_Guard::rule($route, $namespace, 'POST')
 		);
 
 		$this->settings([
@@ -86,13 +86,13 @@ class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
 		]);
 		$this->assertSame(
 			'blocked',
-			WireCore_DR_Guard::rule($route, $namespace, 'POST')
+			WireCore_RC_Guard::rule($route, $namespace, 'POST')
 		);
 
 		$this->settings(['namespaces' => [], 'auto_allow' => []]);
 		$this->assertSame(
 			'auth',
-			WireCore_DR_Guard::rule($route, $namespace, 'POST')
+			WireCore_RC_Guard::rule($route, $namespace, 'POST')
 		);
 	}
 
@@ -263,7 +263,7 @@ class Test_WireCore_DR_Guard extends WireCore_DR_TestCase
 	public function test_error_filter_can_allow_a_request()
 	{
 		add_filter(
-			'wirecore_dr_error',
+			'wirecore_rc_error',
 			function ($error, $route) {
 				return $route === self::ROUTE ? true : $error;
 			},

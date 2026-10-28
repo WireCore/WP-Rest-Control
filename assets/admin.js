@@ -4,13 +4,13 @@
  * rule and serializing all rules into one JSON field.
  */
 (function () {
-	const form = document.getElementById('wirecore-dr-routes');
+	const form = document.getElementById('wirecore-rc-routes');
 	if (!form) {
 		return;
 	}
-	const i18n = window.wirecoreDr;
-	const body = document.getElementById('wirecore-dr-routes-body');
-	const dialog = document.getElementById('wirecore-dr-advanced');
+	const i18n = window.wirecoreRc;
+	const body = document.getElementById('wirecore-rc-routes-body');
+	const dialog = document.getElementById('wirecore-rc-advanced');
 	const ALLOW = ['ip_allow', 'users_allow', 'roles_allow'];
 	const DENY = ['ip_deny', 'roles_deny'];
 	// WireLayer badge variant per rule
@@ -37,7 +37,7 @@
 
 	function advancedButton(target) {
 		return form.querySelector(
-			'.wirecore-dr-advanced-open[data-target="' +
+			'.wirecore-rc-advanced-open[data-target="' +
 				CSS.escape(target) +
 				'"]'
 		);
@@ -55,7 +55,7 @@
 	}
 
 	// Route before namespace before automatic allowance before default, like
-	// WireCore_DR_Guard::rule()
+	// WireCore_RC_Guard::rule()
 	function effective(row, group) {
 		const own = select('route', row.dataset.route, group);
 		if (own.disabled) {
@@ -84,7 +84,7 @@
 	function renderSummary(button) {
 		const access = JSON.parse(button.dataset.access || '{}');
 		const box = button.parentNode.querySelector(
-			'.wirecore-dr-access-summary'
+			'.wirecore-rc-access-summary'
 		);
 		box.textContent = '';
 		ALLOW.concat(DENY).forEach(function (list) {
@@ -109,8 +109,8 @@
 	}
 
 	function update() {
-		form.querySelectorAll('.wirecore-dr-route').forEach(function (row) {
-			const cell = row.querySelector('.wirecore-dr-effective');
+		form.querySelectorAll('.wirecore-rc-route').forEach(function (row) {
+			const cell = row.querySelector('.wirecore-rc-effective');
 			cell.textContent = '';
 			let open = false;
 			['read', 'write'].forEach(function (group) {
@@ -152,11 +152,11 @@
 	}
 
 	function toggle(ns, open) {
-		ns.querySelector('.wirecore-dr-toggle').setAttribute(
+		ns.querySelector('.wirecore-rc-toggle').setAttribute(
 			'aria-expanded',
 			open
 		);
-		ns.querySelector('.wirecore-dr-routes').hidden = !open;
+		ns.querySelector('.wirecore-rc-routes').hidden = !open;
 	}
 
 	function applyFilter() {
@@ -168,7 +168,7 @@
 				term !== '' &&
 				ns.dataset.namespace.toLowerCase().includes(term);
 			let visible = 0;
-			ns.querySelectorAll('.wirecore-dr-route').forEach(function (row) {
+			ns.querySelectorAll('.wirecore-rc-route').forEach(function (row) {
 				const show =
 					(term === '' ||
 						nsMatch ||
@@ -192,7 +192,7 @@
 	function openDialog(button) {
 		current = button;
 		const access = JSON.parse(button.dataset.access || '{}');
-		dialog.querySelector('.wirecore-dr-advanced-target').textContent =
+		dialog.querySelector('.wirecore-rc-advanced-target').textContent =
 			button.dataset.target || i18n.noNamespace;
 		dialog.querySelectorAll('[data-list]').forEach(function (el) {
 			const values = access[el.dataset.list] || [];
@@ -264,7 +264,7 @@
 			).forEach(function (el) {
 				el.value = 'inherit';
 			});
-			form.querySelectorAll('.wirecore-dr-advanced-open').forEach(
+			form.querySelectorAll('.wirecore-rc-advanced-open').forEach(
 				function (el) {
 					el.dataset.access = '{}';
 					renderSummary(el);
@@ -274,12 +274,12 @@
 	};
 
 	function init() {
-		search = document.getElementById('wirecore-dr-search');
-		source = document.getElementById('wirecore-dr-source');
-		filter = document.getElementById('wirecore-dr-filter');
-		expand = document.getElementById('wirecore-dr-expand');
+		search = document.getElementById('wirecore-rc-search');
+		source = document.getElementById('wirecore-rc-source');
+		filter = document.getElementById('wirecore-rc-filter');
+		expand = document.getElementById('wirecore-rc-expand');
 		namespaces = Array.from(
-			form.querySelectorAll('.wirecore-dr-namespace')
+			form.querySelectorAll('.wirecore-rc-namespace')
 		);
 
 		form.querySelectorAll('[data-preset]').forEach(function (button) {
@@ -290,7 +290,7 @@
 		});
 
 		namespaces.forEach(function (ns) {
-			ns.querySelector('.wirecore-dr-toggle').addEventListener(
+			ns.querySelector('.wirecore-rc-toggle').addEventListener(
 				'click',
 				function () {
 					toggle(ns, this.getAttribute('aria-expanded') !== 'true');
@@ -308,7 +308,7 @@
 		});
 
 		body.addEventListener('click', function (event) {
-			const button = event.target.closest('.wirecore-dr-advanced-open');
+			const button = event.target.closest('.wirecore-rc-advanced-open');
 			if (button) {
 				openDialog(button);
 			}
@@ -323,7 +323,7 @@
 		source.addEventListener('change', applyFilter);
 		filter.addEventListener('change', applyFilter);
 
-		form.querySelectorAll('.wirecore-dr-advanced-open').forEach(
+		form.querySelectorAll('.wirecore-rc-advanced-open').forEach(
 			renderSummary
 		);
 		update();
@@ -343,7 +343,7 @@
 			list[el.dataset.key] = list[el.dataset.key] || {};
 			list[el.dataset.key][el.dataset.group] = value;
 		});
-		form.querySelectorAll('.wirecore-dr-advanced-open').forEach(
+		form.querySelectorAll('.wirecore-rc-advanced-open').forEach(
 			function (el) {
 				const access = JSON.parse(el.dataset.access || '{}');
 				if (Object.keys(access).length) {

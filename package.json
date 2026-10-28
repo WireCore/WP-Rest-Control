@@ -1,10 +1,10 @@
 {
-	"name": "wirecore-disable-rest",
+	"name": "wp-rest-control",
 	"version": "1.0.0",
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"scripts": {
-		"build:css": "wirelayer-css embed --scope \"#wirecore-dr\" --components button,badge,card,alert,field,fieldset,input,textarea,native-select,checkbox,checkbox-group,tabs,data-table,dialog,spinner,page-header,inline-code --out assets/wirelayer",
+		"build:css": "wirelayer-css embed --scope \"#wirecore-rc\" --components button,badge,card,alert,field,fieldset,input,textarea,native-select,checkbox,checkbox-group,tabs,data-table,dialog,spinner,page-header,inline-code --out assets/wirelayer",
 		"format": "prettier --no-error-on-unmatched-pattern --write \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \"tests/**\" \".github/**\"",
 		"format:check": "prettier --no-error-on-unmatched-pattern --check \"*.{php,md,json,yml}\" \"includes/**\" \"assets/**\" \"tests/**\" \".github/**\""
 	},

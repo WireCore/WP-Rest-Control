@@ -13,6 +13,6 @@ All notable changes to this project are documented in this file. The format is b
 - Global allow lists, global IP deny list and "never block administrators".
 - Custom error message and status code, HTTPS-only, JSONP off, removal of REST links, hiding blocked routes in the REST index.
 - Optional log of blocked requests with configurable IP storage.
-- Self-test, JSON export/import and WP-CLI commands (`wp wirecore-dr`).
+- Self-test, JSON export/import and WP-CLI commands (`wp wirecore-rest`).
 - Multisite support with settings per site.
 - German translations (`de_DE`, `de_DE_formal`).

@@ -8,9 +8,9 @@ if (!defined('ABSPATH')) {
  * Settings in one option. Everything that is stored (form, import, WP-CLI)
  * goes through sanitize().
  */
-class WireCore_DR_Settings
+class WireCore_RC_Settings
 {
-	const OPTION = 'wirecore_dr_settings';
+	const OPTION = 'wirecore_rc_settings';
 	const RULES = ['inherit', 'public', 'auth', 'admin', 'blocked'];
 	const STATUSES = [401, 403, 404];
 	const LOG_IP_MODES = ['full', 'anonymized', 'none'];
@@ -85,11 +85,11 @@ class WireCore_DR_Settings
 
 	/**
 	 * Namespaces of known plugins that visitors need on the front end.
-	 * key => namespaces, labels in WireCore_DR_Admin.
+	 * key => namespaces, labels in WireCore_RC_Admin.
 	 */
 	public static function known_namespaces()
 	{
-		return apply_filters('wirecore_dr_known_namespaces', [
+		return apply_filters('wirecore_rc_known_namespaces', [
 			'contact-form-7' => ['contact-form-7/v1'],
 			'woocommerce-store' => ['wc/store', 'wc/store/v1'],
 			'oembed' => ['oembed/1.0'],
@@ -116,11 +116,11 @@ class WireCore_DR_Settings
 	public static function rule_labels()
 	{
 		return [
-			'inherit' => __('Inherit', 'wirecore-disable-rest'),
-			'public' => __('Public', 'wirecore-disable-rest'),
-			'auth' => __('Logged-in only', 'wirecore-disable-rest'),
-			'admin' => __('Admins only', 'wirecore-disable-rest'),
-			'blocked' => __('Blocked', 'wirecore-disable-rest'),
+			'inherit' => __('Inherit', 'wirecore-rest-control'),
+			'public' => __('Public', 'wirecore-rest-control'),
+			'auth' => __('Logged-in only', 'wirecore-rest-control'),
+			'admin' => __('Admins only', 'wirecore-rest-control'),
+			'blocked' => __('Blocked', 'wirecore-rest-control'),
 		];
 	}
 
@@ -306,8 +306,8 @@ class WireCore_DR_Settings
 	public static function export()
 	{
 		return [
-			'plugin' => 'wirecore-disable-rest',
-			'version' => WIRECORE_DR_VERSION,
+			'plugin' => 'wirecore-rest-control',
+			'version' => WIRECORE_RC_VERSION,
 			'settings' => self::get(),
 		];
 	}
@@ -320,15 +320,15 @@ class WireCore_DR_Settings
 		$data = json_decode((string) $json, true);
 		if (
 			!is_array($data) ||
-			($data['plugin'] ?? '') !== 'wirecore-disable-rest' ||
+			($data['plugin'] ?? '') !== 'wirecore-rest-control' ||
 			!isset($data['settings']) ||
 			!is_array($data['settings'])
 		) {
 			return new WP_Error(
-				'wirecore_dr_invalid_import',
+				'wirecore_rc_invalid_import',
 				__(
 					'The file is not a valid export of this plugin.',
-					'wirecore-disable-rest'
+					'wirecore-rest-control'
 				)
 			);
 		}

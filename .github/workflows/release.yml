@@ -25,7 +25,7 @@ jobs:
             - name: Check version numbers
               run: |
                   tag="${GITHUB_REF_NAME}"
-                  header=$(sed -n 's/^Version: *//p' wirecore-disable-rest.php | tr -d '\r')
+                  header=$(sed -n 's/^Version: *//p' wirecore-rest-control.php | tr -d '\r')
                   stable=$(sed -n 's/^Stable tag: *//p' readme.txt | tr -d '\r')
                   echo "Tag: $tag, plugin header: $header, readme stable tag: $stable"
                   if [ "$tag" != "$header" ] || [ "$tag" != "$stable" ]; then
@@ -45,7 +45,7 @@ jobs:
               env:
                   SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-                  SLUG: wirecore-disable-rest
+                  SLUG: wirecore-rest-control
                   ASSETS_DIR: .wordpress-org
 
             - name: Create GitHub release

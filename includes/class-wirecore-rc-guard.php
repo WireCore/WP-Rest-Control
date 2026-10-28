@@ -8,14 +8,14 @@ if (!defined('ABSPATH')) {
  * Enforces the rules: checks every REST request, removes REST links from the
  * headers and <head>, disables JSONP and hides blocked routes in the index.
  */
-class WireCore_DR_Guard
+class WireCore_RC_Guard
 {
 	// Reason of the last block for the log (rule, "denied" or "ssl")
 	private static $reason = '';
 
 	public static function init()
 	{
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 
 		// Also covers _embed and sub-requests of /batch/v1, unlike
 		// rest_pre_dispatch
@@ -43,13 +43,13 @@ class WireCore_DR_Guard
 	/**
 	 * Real REST requests only. Internal rest_do_request() calls made by PHP
 	 * (editor preloading, server-side rendering) are not affected.
-	 * WIRECORE_DR_OFF in wp-config.php is the emergency switch.
+	 * WIRECORE_RC_OFF in wp-config.php is the emergency switch.
 	 */
 	public static function enforced()
 	{
 		return defined('REST_REQUEST') &&
 			REST_REQUEST &&
-			!(defined('WIRECORE_DR_OFF') && WIRECORE_DR_OFF);
+			!(defined('WIRECORE_RC_OFF') && WIRECORE_RC_OFF);
 	}
 
 	public static function check($response, $handler, $request)
@@ -63,12 +63,12 @@ class WireCore_DR_Guard
 
 		$path = $request->get_route();
 		$method = $request->get_method();
-		$match = WireCore_DR_Routes::match($path, $method);
+		$match = WireCore_RC_Routes::match($path, $method);
 		list($route, $namespace) = $match ? $match : [$path, ''];
 
 		// Route list of the settings page (manage_options only). Never block
 		// it, otherwise the rules could no longer be edited.
-		if ($route === '/' && WireCore_DR_Admin::routes_request()) {
+		if ($route === '/' && WireCore_RC_Admin::routes_request()) {
 			return $response;
 		}
 
@@ -79,7 +79,7 @@ class WireCore_DR_Guard
 			return $response;
 		}
 
-		WireCore_DR_Log::add([
+		WireCore_RC_Log::add([
 			'method' => $method,
 			'route' => $path,
 			'ip' => $ip,
@@ -99,7 +99,7 @@ class WireCore_DR_Guard
 		WP_User $user,
 		$ip
 	) {
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 
 		if ($settings['require_ssl'] && !is_ssl()) {
 			self::$reason = 'ssl';
@@ -107,7 +107,7 @@ class WireCore_DR_Guard
 				'rest_ssl_required',
 				__(
 					'The REST API is only available over HTTPS.',
-					'wirecore-disable-rest'
+					'wirecore-rest-control'
 				),
 				403,
 				$route,
@@ -149,7 +149,7 @@ class WireCore_DR_Guard
 				? $settings['error_message']
 				: __(
 					'Access to the REST API is restricted.',
-					'wirecore-disable-rest'
+					'wirecore-rest-control'
 				),
 			$status,
 			$route,
@@ -163,10 +163,10 @@ class WireCore_DR_Guard
 	 */
 	public static function rule($route, $namespace, $method)
 	{
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 		$group = in_array(
 			strtoupper($method),
-			WireCore_DR_Routes::READ_METHODS,
+			WireCore_RC_Routes::READ_METHODS,
 			true
 		)
 			? 'read'
@@ -186,7 +186,7 @@ class WireCore_DR_Guard
 		if (
 			in_array(
 				$namespace,
-				WireCore_DR_Settings::auto_allowed_namespaces(),
+				WireCore_RC_Settings::auto_allowed_namespaces(),
 				true
 			)
 		) {
@@ -220,9 +220,9 @@ class WireCore_DR_Guard
 	 */
 	public static function access($route, $namespace)
 	{
-		$all = WireCore_DR_Settings::get()['access'];
+		$all = WireCore_RC_Settings::get()['access'];
 		$access = [];
-		foreach (WireCore_DR_Settings::ACCESS_LISTS as $list) {
+		foreach (WireCore_RC_Settings::ACCESS_LISTS as $list) {
 			$access[$list] = array_merge(
 				$all[$route][$list] ?? [],
 				$all[$namespace][$list] ?? []
@@ -284,7 +284,7 @@ class WireCore_DR_Guard
 	private static function error($code, $message, $status, $route, $method)
 	{
 		$error = new WP_Error($code, $message, ['status' => $status]);
-		return apply_filters('wirecore_dr_error', $error, $route, $method);
+		return apply_filters('wirecore_rc_error', $error, $route, $method);
 	}
 
 	public static function client_ip()
@@ -293,7 +293,7 @@ class WireCore_DR_Guard
 			? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']))
 			: '';
 		// e.g. for sites behind a reverse proxy
-		$ip = (string) apply_filters('wirecore_dr_client_ip', $ip);
+		$ip = (string) apply_filters('wirecore_rc_client_ip', $ip);
 		return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '';
 	}
 
