@@ -71,6 +71,8 @@ docker compose up -d   # WordPress on http://localhost:8092, phpMyAdmin on :8093
 npm install            # Prettier with the PHP plugin, @wirecore/wirelayer-css
 ```
 
+The container runs the newest supported PHP version (8.5, see `Dockerfile`), so deprecations show up during development.
+
 The settings page uses the [WireLayer](https://github.com/WireCore/WireLayer) components (`.wc-*` classes). `npm run build:css` writes the components listed in `package.json`, scoped to `#wirecore-rc`, with their fonts to `assets/wirelayer/`. The output is committed, so the plugin needs no build step; run the command again after adding a component or updating `@wirecore/wirelayer-css`.
 
 WP-CLI is available in the container:
@@ -105,6 +107,17 @@ docker compose exec -w /var/www/html/wp-content/plugins/wirecore-rest-control wo
 
 The database settings in [`tests/wp-tests-config.php`](tests/wp-tests-config.php) default to the Docker environment and can be overridden with `WP_TESTS_DB_HOST`, `WP_TESTS_DB_USER`, `WP_TESTS_DB_PASSWORD` and `WP_TESTS_DB_NAME`.
 
+The plugin supports PHP 7.4 – 8.5. To run the syntax check and the tests on every version like the CI does, use the official PHP images in the network of the Docker environment:
+
+```bash
+for v in 7.4 8.0 8.1 8.2 8.3 8.4 8.5; do
+    docker run --rm --network "$(basename "$PWD" | tr '[:upper:]' '[:lower:]')_default" -v "$PWD":/app -w /app -e WP_TESTS_DB_PASSWORD=password php:$v-cli \
+        sh -c "docker-php-ext-install mysqli >/dev/null && find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -exec php -l {} \; | grep -v 'No syntax errors'; vendor/bin/phpunit"
+done
+```
+
+Composer installs the dependencies for PHP 7.4 (`config.platform` in `composer.json`), so the same `vendor/` works on every version.
+
 ### Translations
 
 All UI strings are English in the code (text domain `wirecore-rest-control`) and translated in `languages/`. After changing strings (`P=wp-content/plugins/wirecore-rest-control`):
@@ -125,9 +138,9 @@ Only the files needed by the plugin are shipped. Development files are excluded 
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every push to `main` and on pull requests:
 
-- PHP syntax check on PHP 7.4 – 8.4
-- PHP compatibility for the minimum PHP version (`composer phpcs`, see [`phpcs.xml.dist`](phpcs.xml.dist))
-- PHPUnit on PHP 7.4 and 8.3 (`composer test`)
+- PHP syntax check on PHP 7.4 – 8.5
+- PHP compatibility from PHP 7.4 up to 8.5 with PHPCompatibility 10 (`composer phpcs`, see [`phpcs.xml.dist`](phpcs.xml.dist))
+- PHPUnit on PHP 7.4 – 8.5 (`composer test`); deprecations fail the tests
 - Prettier (`npm run format:check`)
 - Plugin Check on the built package, warnings included
 
