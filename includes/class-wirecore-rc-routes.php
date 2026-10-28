@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Reads all registered REST routes – including those of plugins and themes –
  * and detects via reflection which plugin or theme registered them.
  */
-class WireCore_DR_Routes
+class WireCore_RC_Routes
 {
 	const READ_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 
@@ -45,7 +45,7 @@ class WireCore_DR_Routes
 				'source' =>
 					$source !== ''
 						? $source
-						: __('Unknown', 'wirecore-disable-rest'),
+						: __('Unknown', 'wirecore-rest-control'),
 			];
 		}
 
@@ -140,7 +140,7 @@ class WireCore_DR_Routes
 			$slug = strtok(substr($file, strlen($plugin_dir)), '/');
 			return sprintf(
 				/* translators: %s: plugin name */
-				__('%s (plugin)', 'wirecore-disable-rest'),
+				__('%s (plugin)', 'wirecore-rest-control'),
 				self::plugin_name($slug)
 			);
 		}
@@ -150,7 +150,7 @@ class WireCore_DR_Routes
 			$slug = strtok(substr($file, strlen($mu_dir)), '/');
 			return sprintf(
 				/* translators: %s: file or folder name of the must-use plugin */
-				__('%s (must-use plugin)', 'wirecore-disable-rest'),
+				__('%s (must-use plugin)', 'wirecore-rest-control'),
 				$slug
 			);
 		}
@@ -161,7 +161,7 @@ class WireCore_DR_Routes
 				$slug = strtok(substr($file, strlen($theme_root)), '/');
 				return sprintf(
 					/* translators: %s: theme name */
-					__('%s (theme)', 'wirecore-disable-rest'),
+					__('%s (theme)', 'wirecore-rest-control'),
 					wp_get_theme($slug)->get('Name') ?: $slug
 				);
 			}

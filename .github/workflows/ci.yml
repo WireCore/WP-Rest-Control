@@ -109,12 +109,12 @@ jobs:
             - name: Build plugin package
               # Same file selection as the wordpress.org deployment (.distignore).
               run: |
-                  mkdir -p build/wirecore-disable-rest
-                  rsync -a --exclude-from=.distignore ./ build/wirecore-disable-rest/ --exclude=/build
+                  mkdir -p build/wirecore-rest-control
+                  rsync -a --exclude-from=.distignore ./ build/wirecore-rest-control/ --exclude=/build
             - uses: wordpress/plugin-check-action@v1
               with:
-                  build-dir: build/wirecore-disable-rest
-                  slug: wirecore-disable-rest
+                  build-dir: build/wirecore-rest-control
+                  slug: wirecore-rest-control
                   include-experimental: true
                   # Warnings fail the build as well – the plugin is free of both.
                   strict: true

@@ -2,7 +2,7 @@
 /**
  * Enforcement on real REST requests dispatched through the REST server.
  */
-class Test_WireCore_DR_Rest extends WireCore_DR_TestCase
+class Test_WireCore_RC_Rest extends WireCore_RC_TestCase
 {
 	public function test_guests_are_blocked_by_default()
 	{
@@ -95,14 +95,14 @@ class Test_WireCore_DR_Rest extends WireCore_DR_TestCase
 			'admin_bypass' => false,
 			'default' => ['read' => 'blocked', 'write' => 'blocked'],
 		]);
-		$_GET[WireCore_DR_Admin::ROUTES_PARAM] = '1';
+		$_GET[WireCore_RC_Admin::ROUTES_PARAM] = '1';
 
 		wp_set_current_user($this->user('administrator')->ID);
 		$response = $this->request('GET', '/');
 		$this->assertSame(200, $response->get_status());
 		$this->assertStringContainsString(
-			'wirecore-dr-namespace',
-			$response->get_data()[WireCore_DR_Admin::ROUTES_PARAM]
+			'wirecore-rc-namespace',
+			$response->get_data()[WireCore_RC_Admin::ROUTES_PARAM]
 		);
 
 		wp_set_current_user($this->user('editor')->ID);
@@ -117,12 +117,12 @@ class Test_WireCore_DR_Rest extends WireCore_DR_TestCase
 			'none' => '',
 		];
 		foreach ($expected as $mode => $ip) {
-			WireCore_DR_Log::clear();
+			WireCore_RC_Log::clear();
 			$this->settings(['log_enabled' => true, 'log_ip' => $mode]);
 
 			$this->request('GET', '/wp/v2/users');
 
-			$entry = WireCore_DR_Log::get()['entries'][0];
+			$entry = WireCore_RC_Log::get()['entries'][0];
 			$this->assertSame($ip, $entry['ip'], $mode);
 			$this->assertSame('/wp/v2/users', $entry['route']);
 			$this->assertSame('auth', $entry['reason']);
@@ -132,13 +132,13 @@ class Test_WireCore_DR_Rest extends WireCore_DR_TestCase
 	public function test_log_records_deny_list_as_reason_and_stays_off_by_default()
 	{
 		$this->request('GET', '/wp/v2/users');
-		$this->assertSame(0, WireCore_DR_Log::get()['count']);
+		$this->assertSame(0, WireCore_RC_Log::get()['count']);
 
 		$this->settings(['log_enabled' => true, 'ip_blacklist' => [self::IP]]);
 		$this->request('GET', '/wp/v2/users');
 		$this->assertSame(
 			'denied',
-			WireCore_DR_Log::get()['entries'][0]['reason']
+			WireCore_RC_Log::get()['entries'][0]['reason']
 		);
 	}
 }

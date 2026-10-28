@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are released for the latest version of WireCore Disable REST only. Please update to the latest version before reporting an issue.
+Security fixes are released for the latest version of WireCore REST Control only. Please update to the latest version before reporting an issue.
 
 ## Reporting a vulnerability
 

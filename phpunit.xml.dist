@@ -10,7 +10,7 @@
 	convertDeprecationsToExceptions="true"
 >
 	<testsuites>
-		<testsuite name="WireCore Disable REST">
+		<testsuite name="WireCore REST Control">
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>

@@ -3,7 +3,7 @@
  * Base class for the plugin tests: resets the settings between tests and
  * offers helpers for settings, users and REST requests.
  */
-abstract class WireCore_DR_TestCase extends WP_UnitTestCase
+abstract class WireCore_RC_TestCase extends WP_UnitTestCase
 {
 	const IP = '203.0.113.10';
 
@@ -11,11 +11,11 @@ abstract class WireCore_DR_TestCase extends WP_UnitTestCase
 	{
 		parent::set_up();
 		self::reset_settings_cache();
-		delete_option(WireCore_DR_Settings::OPTION);
-		delete_option(WireCore_DR_Log::OPTION);
+		delete_option(WireCore_RC_Settings::OPTION);
+		delete_option(WireCore_RC_Log::OPTION);
 		self::reset_settings_cache();
 		$_SERVER['REMOTE_ADDR'] = self::IP;
-		unset($_SERVER['HTTPS'], $_GET[WireCore_DR_Admin::ROUTES_PARAM]);
+		unset($_SERVER['HTTPS'], $_GET[WireCore_RC_Admin::ROUTES_PARAM]);
 		wp_set_current_user(0);
 	}
 
@@ -32,7 +32,7 @@ abstract class WireCore_DR_TestCase extends WP_UnitTestCase
 	protected static function reset_settings_cache()
 	{
 		$property = new ReflectionProperty(
-			WireCore_DR_Settings::class,
+			WireCore_RC_Settings::class,
 			'cache'
 		);
 		$property->setAccessible(true);
@@ -41,8 +41,8 @@ abstract class WireCore_DR_TestCase extends WP_UnitTestCase
 
 	protected function settings(array $changes)
 	{
-		WireCore_DR_Settings::save(
-			array_merge(WireCore_DR_Settings::get(), $changes)
+		WireCore_RC_Settings::save(
+			array_merge(WireCore_RC_Settings::get(), $changes)
 		);
 	}
 

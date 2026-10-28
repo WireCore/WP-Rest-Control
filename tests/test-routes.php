@@ -1,18 +1,18 @@
 <?php
 /**
- * WireCore_DR_Routes: route matching and the grouped route list.
+ * WireCore_RC_Routes: route matching and the grouped route list.
  */
-class Test_WireCore_DR_Routes extends WireCore_DR_TestCase
+class Test_WireCore_RC_Routes extends WireCore_RC_TestCase
 {
 	public function test_match_returns_pattern_and_namespace()
 	{
 		$this->assertSame(
 			['/wp/v2/users/(?P<id>[\d]+)', 'wp/v2'],
-			WireCore_DR_Routes::match('/wp/v2/users/12', 'GET')
+			WireCore_RC_Routes::match('/wp/v2/users/12', 'GET')
 		);
 		$this->assertSame(
 			['/wcdr-test/v1/item', 'wcdr-test/v1'],
-			WireCore_DR_Routes::match('/wcdr-test/v1/item', 'POST')
+			WireCore_RC_Routes::match('/wcdr-test/v1/item', 'POST')
 		);
 	}
 
@@ -20,17 +20,17 @@ class Test_WireCore_DR_Routes extends WireCore_DR_TestCase
 	{
 		$this->assertSame(
 			['/wcdr-test/v1/item', 'wcdr-test/v1'],
-			WireCore_DR_Routes::match('/wcdr-test/v1/item', 'HEAD')
+			WireCore_RC_Routes::match('/wcdr-test/v1/item', 'HEAD')
 		);
 		$this->assertNull(
-			WireCore_DR_Routes::match('/wcdr-test/v1/item', 'DELETE')
+			WireCore_RC_Routes::match('/wcdr-test/v1/item', 'DELETE')
 		);
-		$this->assertNull(WireCore_DR_Routes::match('/no/such/route', 'GET'));
+		$this->assertNull(WireCore_RC_Routes::match('/no/such/route', 'GET'));
 	}
 
 	public function test_route_list_groups_routes_with_methods_and_sources()
 	{
-		$all = WireCore_DR_Routes::all();
+		$all = WireCore_RC_Routes::all();
 
 		$this->assertSame('WordPress', $all['wp/v2']['source']);
 		$this->assertSame(
@@ -51,7 +51,7 @@ class Test_WireCore_DR_Routes extends WireCore_DR_TestCase
 
 	public function test_namespace_index_route_inherits_the_namespace_source()
 	{
-		$all = WireCore_DR_Routes::all();
+		$all = WireCore_RC_Routes::all();
 
 		// The test routes live outside the plugin directory of the test
 		// installation, so their source is unknown – the index route that core

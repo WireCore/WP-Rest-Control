@@ -1,22 +1,22 @@
 /*
  * Layout of the settings page. The components come from WireLayer
- * (assets/wirelayer/wirelayer.css, scoped to #wirecore-dr); colors and
+ * (assets/wirelayer/wirelayer.css, scoped to #wirecore-rc); colors and
  * spacing use its variables.
  */
 
 /* WordPress styles form controls and links by element (forms.css, common.css);
    inside the page the WireLayer components style them */
-#wirecore-dr :is(a, button, input, select, textarea) {
+#wirecore-rc :is(a, button, input, select, textarea) {
 	box-shadow: none;
 	min-height: 0;
 	max-width: none;
 }
 
-#wirecore-dr select {
+#wirecore-rc select {
 	background-image: none;
 }
 
-#wirecore-dr {
+#wirecore-rc {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -26,13 +26,13 @@
 	font-size: 14px;
 }
 
-#wirecore-dr .wirecore-dr-stack {
+#wirecore-rc .wirecore-rc-stack {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 }
 
-#wirecore-dr .wirecore-dr-row {
+#wirecore-rc .wirecore-rc-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -40,7 +40,7 @@
 }
 
 /* A label in front of its control: "Read [select]" */
-#wirecore-dr .wirecore-dr-labeled {
+#wirecore-rc .wirecore-rc-labeled {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
@@ -49,28 +49,28 @@
 	font-weight: 500;
 }
 
-#wirecore-dr .wirecore-dr-rule {
+#wirecore-rc .wirecore-rc-rule {
 	width: 10rem;
 }
 
-#wirecore-dr .wirecore-dr-search {
+#wirecore-rc .wirecore-rc-search {
 	width: 280px;
 }
 
-#wirecore-dr .wirecore-dr-filter {
+#wirecore-rc .wirecore-rc-filter {
 	width: 12rem;
 }
 
 /* Form fields in a card keep a readable width */
-#wirecore-dr .wc-card > .wc-field {
+#wirecore-rc .wc-card > .wc-field {
 	max-width: 40rem;
 }
 
-#wirecore-dr .wc-card > .wirecore-dr-narrow {
+#wirecore-rc .wc-card > .wirecore-rc-narrow {
 	max-width: 24rem;
 }
 
-#wirecore-dr input[type='file']::file-selector-button {
+#wirecore-rc input[type='file']::file-selector-button {
 	margin-inline-end: 10px;
 	padding: 4px 12px;
 	border: 1px solid var(--wc-line-strong);
@@ -81,13 +81,13 @@
 	cursor: pointer;
 }
 
-#wirecore-dr .wirecore-dr-checkbox-title {
+#wirecore-rc .wirecore-rc-checkbox-title {
 	display: block;
 	color: var(--wc-fg);
 	font-weight: 600;
 }
 
-#wirecore-dr .wirecore-dr-list {
+#wirecore-rc .wirecore-rc-list {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -96,23 +96,23 @@
 	line-height: 1.6;
 }
 
-#wirecore-dr .wirecore-dr-hint {
+#wirecore-rc .wirecore-rc-hint {
 	margin-inline-end: auto;
 	color: var(--wc-muted);
 	font-size: 13px;
 }
 
 /* Routes: one card per namespace, the routes as a table below its header */
-#wirecore-dr .wirecore-dr-namespaces {
+#wirecore-rc .wirecore-rc-namespaces {
 	gap: 10px;
 }
 
-#wirecore-dr .wirecore-dr-namespace {
+#wirecore-rc .wirecore-rc-namespace {
 	gap: 0;
 	padding: 0;
 }
 
-#wirecore-dr .wirecore-dr-namespace-head {
+#wirecore-rc .wirecore-rc-namespace-head {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -120,7 +120,7 @@
 	padding: 10px 16px;
 }
 
-#wirecore-dr .wirecore-dr-toggle {
+#wirecore-rc .wirecore-rc-toggle {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
@@ -128,86 +128,86 @@
 	cursor: pointer;
 }
 
-#wirecore-dr .wirecore-dr-toggle:focus-visible {
+#wirecore-rc .wirecore-rc-toggle:focus-visible {
 	outline: 2px solid var(--wc-fg);
 	outline-offset: 2px;
 }
 
-#wirecore-dr .wirecore-dr-toggle-icon {
+#wirecore-rc .wirecore-rc-toggle-icon {
 	width: 16px;
 	height: 16px;
 	color: var(--wc-muted);
 	transition: rotate 0.15s;
 }
 
-#wirecore-dr
-	.wirecore-dr-toggle[aria-expanded='true']
-	.wirecore-dr-toggle-icon {
+#wirecore-rc
+	.wirecore-rc-toggle[aria-expanded='true']
+	.wirecore-rc-toggle-icon {
 	rotate: 90deg;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	#wirecore-dr .wirecore-dr-toggle-icon {
+	#wirecore-rc .wirecore-rc-toggle-icon {
 		transition: none;
 	}
 }
 
-#wirecore-dr .wirecore-dr-meta {
+#wirecore-rc .wirecore-rc-meta {
 	color: var(--wc-muted);
 	font-size: 13px;
 }
 
-#wirecore-dr .wirecore-dr-selects {
+#wirecore-rc .wirecore-rc-selects {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px 16px;
 	margin-inline-start: auto;
 }
 
-#wirecore-dr .wirecore-dr-routes {
+#wirecore-rc .wirecore-rc-routes {
 	border-top: 1px solid var(--wc-line);
 }
 
-#wirecore-dr .wirecore-dr-advanced-wrap,
-#wirecore-dr .wirecore-dr-access-summary {
+#wirecore-rc .wirecore-rc-advanced-wrap,
+#wirecore-rc .wirecore-rc-access-summary {
 	display: inline-flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 4px 6px;
 }
 
-#wirecore-dr .wirecore-dr-route .wirecore-dr-advanced-wrap {
+#wirecore-rc .wirecore-rc-route .wirecore-rc-advanced-wrap {
 	margin-inline-start: 6px;
 }
 
-#wirecore-dr .wirecore-dr-effective .wc-badge {
+#wirecore-rc .wirecore-rc-effective .wc-badge {
 	margin: 2px 4px 2px 0;
 }
 
 /* "Advanced" dialog */
-#wirecore-dr .wirecore-dr-columns {
+#wirecore-rc .wirecore-rc-columns {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
 	margin-top: 8px;
 }
 
-#wirecore-dr .wirecore-dr-columns > .wc-fieldset {
+#wirecore-rc .wirecore-rc-columns > .wc-fieldset {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 }
 
-#wirecore-dr #wirecore-dr-advanced .wc-dialog-content {
+#wirecore-rc #wirecore-rc-advanced .wc-dialog-content {
 	width: min(760px, calc(100vw - 2rem));
 }
 
 @media (max-width: 782px) {
-	#wirecore-dr .wirecore-dr-columns {
+	#wirecore-rc .wirecore-rc-columns {
 		grid-template-columns: 1fr;
 	}
 
-	#wirecore-dr .wirecore-dr-selects {
+	#wirecore-rc .wirecore-rc-selects {
 		margin-inline-start: 0;
 	}
 }

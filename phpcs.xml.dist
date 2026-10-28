@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WireCore Disable REST">
+<ruleset name="WireCore REST Control">
 	<description>PHP compatibility check for the minimum supported PHP version.</description>
 
 	<file>.</file>

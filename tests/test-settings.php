@@ -1,12 +1,12 @@
 <?php
 /**
- * WireCore_DR_Settings: defaults, sanitizing, export and import.
+ * WireCore_RC_Settings: defaults, sanitizing, export and import.
  */
-class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
+class Test_WireCore_RC_Settings extends WireCore_RC_TestCase
 {
 	public function test_defaults_apply_without_stored_option()
 	{
-		$settings = WireCore_DR_Settings::get();
+		$settings = WireCore_RC_Settings::get();
 
 		$this->assertSame(
 			['read' => 'auth', 'write' => 'auth'],
@@ -16,14 +16,14 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 		$this->assertSame(401, $settings['error_status']);
 		$this->assertSame('anonymized', $settings['log_ip']);
 		$this->assertSame(
-			array_keys(WireCore_DR_Settings::known_namespaces()),
+			array_keys(WireCore_RC_Settings::known_namespaces()),
 			$settings['auto_allow']
 		);
 	}
 
 	public function test_default_rule_rejects_inherit_and_unknown_values()
 	{
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'default' => ['read' => 'inherit', 'write' => 'nonsense'],
 		]);
 
@@ -36,7 +36,7 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 	public function test_overrides_keep_route_patterns_and_drop_inherit_only_entries()
 	{
 		$route = '/wp/v2/users/(?P<id>[\d]+)';
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'routes' => [
 				$route => ['read' => 'admin', 'write' => 'bogus'],
 				'/wp/v2/posts' => ['read' => 'inherit', 'write' => 'inherit'],
@@ -54,7 +54,7 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 
 	public function test_ip_lists_accept_addresses_and_valid_cidr_ranges_only()
 	{
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'ip_whitelist' => [
 				' 203.0.113.5 ',
 				'10.0.0.0/8',
@@ -77,7 +77,7 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 
 	public function test_roles_and_user_ids_are_validated()
 	{
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'allowed_roles' => ['editor', 'no-such-role'],
 			'user_whitelist' => ['3', '0', 'abc', '3'],
 		]);
@@ -88,7 +88,7 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 
 	public function test_access_lists_are_sanitized_and_empty_entries_removed()
 	{
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'access' => [
 				'wp/v2' => [
 					'ip_allow' => ['10.0.0.0/8', 'bad'],
@@ -116,19 +116,19 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 	{
 		$this->assertSame(
 			['oembed'],
-			WireCore_DR_Settings::sanitize([
+			WireCore_RC_Settings::sanitize([
 				'auto_allow' => ['oembed', 'nope'],
 			])['auto_allow']
 		);
 		$this->assertSame(
 			[],
-			WireCore_DR_Settings::sanitize(['auto_allow' => []])['auto_allow']
+			WireCore_RC_Settings::sanitize(['auto_allow' => []])['auto_allow']
 		);
 	}
 
 	public function test_invalid_status_and_log_mode_fall_back_to_defaults()
 	{
-		$settings = WireCore_DR_Settings::sanitize([
+		$settings = WireCore_RC_Settings::sanitize([
 			'error_status' => 500,
 			'log_ip' => 'everything',
 		]);
@@ -143,23 +143,23 @@ class Test_WireCore_DR_Settings extends WireCore_DR_TestCase
 			'default' => ['read' => 'blocked', 'write' => 'admin'],
 			'access' => ['wp/v2' => ['ip_deny' => ['192.0.2.0/24']]],
 		]);
-		$json = wp_json_encode(WireCore_DR_Settings::export());
-		$expected = WireCore_DR_Settings::get();
+		$json = wp_json_encode(WireCore_RC_Settings::export());
+		$expected = WireCore_RC_Settings::get();
 
-		delete_option(WireCore_DR_Settings::OPTION);
+		delete_option(WireCore_RC_Settings::OPTION);
 		self::reset_settings_cache();
 
-		$this->assertTrue(WireCore_DR_Settings::import($json));
-		$this->assertSame($expected, WireCore_DR_Settings::get());
+		$this->assertTrue(WireCore_RC_Settings::import($json));
+		$this->assertSame($expected, WireCore_RC_Settings::get());
 	}
 
 	public function test_import_rejects_files_of_other_plugins()
 	{
-		$result = WireCore_DR_Settings::import(
+		$result = WireCore_RC_Settings::import(
 			wp_json_encode(['plugin' => 'other', 'settings' => []])
 		);
 
 		$this->assertWPError($result);
-		$this->assertWPError(WireCore_DR_Settings::import('not json'));
+		$this->assertWPError(WireCore_RC_Settings::import('not json'));
 	}
 }

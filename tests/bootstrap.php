@@ -6,16 +6,16 @@
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 putenv('WP_PHPUNIT__TESTS_CONFIG=' . __DIR__ . '/wp-tests-config.php');
-$wirecore_dr_tests_dir = getenv('WP_PHPUNIT__DIR');
+$wirecore_rc_tests_dir = getenv('WP_PHPUNIT__DIR');
 
-require $wirecore_dr_tests_dir . '/includes/functions.php';
+require $wirecore_rc_tests_dir . '/includes/functions.php';
 
 tests_add_filter('muplugins_loaded', function () {
-	require dirname(__DIR__) . '/wirecore-disable-rest.php';
+	require dirname(__DIR__) . '/wirecore-rest-control.php';
 });
 
 // Routes used by the tests. They are registered before the first REST server
-// is created, because WireCore_DR_Routes caches the route list per request.
+// is created, because WireCore_RC_Routes caches the route list per request.
 tests_add_filter('rest_api_init', function () {
 	register_rest_route('wcdr-test/v1', '/item', [
 		[
@@ -46,10 +46,10 @@ tests_add_filter('rest_api_init', function () {
 	]);
 });
 
-require $wirecore_dr_tests_dir . '/includes/bootstrap.php';
+require $wirecore_rc_tests_dir . '/includes/bootstrap.php';
 
 // The rules are only enforced for real REST requests; the tests dispatch
 // requests directly to the REST server.
 define('REST_REQUEST', true);
 
-require __DIR__ . '/class-wirecore-dr-testcase.php';
+require __DIR__ . '/class-wirecore-rc-testcase.php';
