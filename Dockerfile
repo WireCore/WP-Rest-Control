@@ -1,4 +1,4 @@
-FROM wordpress:php8.2-apache
+FROM wordpress:php8.5-apache
 
 # install some needed packages
 RUN apt update && apt install mariadb-client -y
