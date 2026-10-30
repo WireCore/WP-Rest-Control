@@ -23,6 +23,7 @@
 /CLAUDE.md export-ignore
 /CHANGELOG.md export-ignore
 /SECURITY.md export-ignore
+/languages export-ignore
 
 # Consistent line endings
 * text=auto eol=lf

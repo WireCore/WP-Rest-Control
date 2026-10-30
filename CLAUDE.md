@@ -23,7 +23,7 @@ WordPress plugin, published on wordpress.org (slug `wirecore-rest-control`) and 
 
 ## Translations
 
-All UI strings are English in the code and translated in `languages/`: `de_DE` (informal) and `de_DE_formal` (formal). WP-CLI output stays English and untranslated. `load_plugin_textdomain()` is kept for the bundled translations until language packs exist on translate.wordpress.org.
+All UI strings are English in the code. Translations are delivered as language packs from translate.wordpress.org, so there is no `load_plugin_textdomain()` and `languages/` is not shipped (wordpress.org review). `languages/` holds the template and the German translations `de_DE` (informal) and `de_DE_formal` (formal) for importing into translate.wordpress.org. WP-CLI output stays English and untranslated.
 
 After changing strings (inside the Docker container, `P=wp-content/plugins/wirecore-rest-control`):
 
@@ -35,11 +35,11 @@ docker compose exec wordpress wp --allow-root i18n make-mo $P/languages
 docker compose exec wordpress wp --allow-root i18n make-php $P/languages
 ```
 
-`.po`, `.mo` and `.l10n.php` are part of the package. The files are created as root inside the container – `chown` them to your user if needed.
+The files are created as root inside the container – `chown` them to your user if needed.
 
 ## Package contents
 
-Only `wirecore-rest-control.php`, `uninstall.php`, `index.php`, `readme.txt`, `LICENSE`, `includes/`, `assets/` and `languages/` are shipped. New development or configuration files must be added to both `.distignore` and `.gitattributes` (`export-ignore`).
+Only `wirecore-rest-control.php`, `uninstall.php`, `index.php`, `readme.txt`, `LICENSE`, `includes/` and `assets/` are shipped. New development or configuration files must be added to both `.distignore` and `.gitattributes` (`export-ignore`).
 
 ## Checks
 

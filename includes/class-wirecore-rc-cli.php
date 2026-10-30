@@ -220,27 +220,19 @@ class WireCore_RC_Cli
 	}
 
 	/**
-	 * Exports the settings as JSON.
+	 * Exports the settings as JSON to STDOUT.
 	 *
-	 * ## OPTIONS
+	 * ## EXAMPLES
 	 *
-	 * [<file>]
-	 * : Target file. Prints to STDOUT if omitted.
+	 *     wp wirecore-rest export > settings.json
 	 */
-	public function export($args)
+	public function export()
 	{
 		$json = wp_json_encode(
 			WireCore_RC_Settings::export(),
 			JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 		);
-		if (!isset($args[0])) {
-			WP_CLI::line($json);
-			return;
-		}
-		if (file_put_contents($args[0], $json . "\n") === false) {
-			WP_CLI::error(sprintf('Could not write "%s".', $args[0]));
-		}
-		WP_CLI::success(sprintf('Exported to %s.', $args[0]));
+		WP_CLI::line($json);
 	}
 
 	/**
