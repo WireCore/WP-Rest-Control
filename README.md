@@ -47,7 +47,7 @@ wp wirecore-rest status
 wp wirecore-rest routes [--namespace=<namespace>] [--source=<text>] [--format=table|json|csv]
 wp wirecore-rest set <route|namespace> [--read=<rule>] [--write=<rule>]
 wp wirecore-rest default [--read=<rule>] [--write=<rule>]
-wp wirecore-rest export [<file>]
+wp wirecore-rest export > settings.json
 wp wirecore-rest import <file>
 wp wirecore-rest log [--clear] [--format=table|json|csv]
 ```
@@ -120,7 +120,7 @@ Composer installs the dependencies for PHP 7.4 (`config.platform` in `composer.j
 
 ### Translations
 
-All UI strings are English in the code (text domain `wirecore-rest-control`) and translated in `languages/`. After changing strings (`P=wp-content/plugins/wirecore-rest-control`):
+All UI strings are English in the code (text domain `wirecore-rest-control`). Translations are delivered as language packs from translate.wordpress.org; `languages/` holds the template and the German translations for importing there and is not shipped. After changing strings (`P=wp-content/plugins/wirecore-rest-control`):
 
 ```bash
 docker compose exec wordpress wp --allow-root i18n make-pot $P $P/languages/wirecore-rest-control.pot --domain=wirecore-rest-control --exclude=node_modules,db-data,languages
