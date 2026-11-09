@@ -17,6 +17,7 @@
     <a href="#wp-cli">WP-CLI</a> ·
     <a href="#development">Development</a> ·
     <a href="CHANGELOG.md">Changelog</a> ·
+    <a href="CONTRIBUTING.md">Contributing</a> ·
     <a href="SECURITY.md">Security</a>
 </p>
 
@@ -147,7 +148,7 @@ The self-test under _Tools_ does not work locally, because the container cannot 
     docker compose exec wordpress wp --allow-root plugin install plugin-check --activate
     docker compose exec wordpress wp --allow-root plugin check wirecore-rest-control \
         --exclude-directories=node_modules,db-data,.vscode,.github,vendor,tests \
-        --exclude-files=.gitignore,.gitattributes,.distignore,.prettierrc,.prettierignore,CLAUDE.md,README.md,CHANGELOG.md,SECURITY.md
+        --exclude-files=.gitignore,.gitattributes,.distignore,.prettierrc,.prettierignore,CLAUDE.md,README.md,CHANGELOG.md,SECURITY.md,CONTRIBUTING.md
     ```
 
 ### Tests
