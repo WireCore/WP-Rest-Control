@@ -1,10 +1,44 @@
-# WireCore REST Control
+<p align="center">
+    <img src=".wordpress-org/icon-256x256.png" alt="" width="128" height="128" />
+</p>
 
-Disable the WordPress REST API selectively – per namespace, route and HTTP method, including the routes of other plugins, with IP, role and user exceptions.
+<h1 align="center">WireCore REST Control</h1>
+
+<p align="center">
+    Disable the WordPress REST API selectively – per namespace, route and HTTP method,<br />
+    including the routes of other plugins, with IP, role and user exceptions.<br />
+    WordPress 5.8+ · PHP 7.4 – 8.5 · English and German
+</p>
+
+<p align="center">
+    <a href="https://wordpress.org/plugins/wirecore-rest-control/"><b>wordpress.org</b></a> ·
+    <a href="#installation">Installation</a> ·
+    <a href="#how-it-compares">How it compares</a> ·
+    <a href="#wp-cli">WP-CLI</a> ·
+    <a href="#development">Development</a> ·
+    <a href="CHANGELOG.md">Changelog</a> ·
+    <a href="SECURITY.md">Security</a>
+</p>
+
+<p align="center">
+    <a href="https://wordpress.org/plugins/wirecore-rest-control/"><img alt="wordpress.org version" src="https://img.shields.io/wordpress/plugin/v/wirecore-rest-control" /></a>
+    <a href="https://wordpress.org/plugins/wirecore-rest-control/"><img alt="Tested up to" src="https://img.shields.io/wordpress/plugin/tested/wirecore-rest-control" /></a>
+    <img alt="PHP 7.4+" src="https://img.shields.io/wordpress/plugin/required-php/wirecore-rest-control" />
+    <a href="https://github.com/WireCore/WP-Rest-Control/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/WireCore/WP-Rest-Control/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+    <a href="LICENSE"><img alt="License: GPL-2.0-or-later" src="https://img.shields.io/badge/license-GPL--2.0--or--later-green" /></a>
+</p>
+
+## About
 
 Instead of an all-or-nothing switch, WireCore REST Control lists **every registered REST route** (core, themes and all plugins), shows which plugin or theme registered it, and lets you decide per namespace and per route who may read and who may write.
 
 The user-facing description lives in [`readme.txt`](readme.txt), which is also shown on wordpress.org.
+
+## Why WireCore REST Control
+
+The REST API exposes more than most sites need: the user names of all authors (`/wp/v2/users`), and every route that any installed plugin registers – often without anyone having looked at it. Switching the whole API off for visitors is the usual answer, but it breaks the plugins that rely on it in the front end: contact forms, the WooCommerce checkout, embeds, statistics.
+
+WireCore REST Control closes everything by default and opens exactly what is needed – per route, per namespace, separately for reading and writing – with the front-end plugins that need the API allowed out of the box.
 
 ## Features
 
@@ -16,9 +50,29 @@ The user-facing description lives in [`readme.txt`](readme.txt), which is also s
 - Covers `_embed` and `/batch/v1` sub-requests; requests with invalid parameters are blocked before WordPress reveals the expected parameters.
 - Optional log of blocked requests (IP stored in full, shortened or not at all), self-test, JSON export/import, WP-CLI.
 - Multisite: settings per site, network activation supported.
-- Translations: English source strings, German (`de_DE`, `de_DE_formal`) bundled.
+- Translations: English source strings, German (`de_DE`, `de_DE_formal`) via translate.wordpress.org.
 
 Requires WordPress 5.8+ and PHP 7.4+.
+
+## How it compares
+
+|                                                                        |                           WireCore REST Control                           | [Disable REST API](https://wordpress.org/plugins/disable-json-api/) | [Disable WP REST API](https://wordpress.org/plugins/disable-wp-rest-api/) | [Perfmatters](https://perfmatters.io/docs/disable-wordpress-rest-api/) | [JWT Authentication for WP REST APIs](https://wordpress.org/plugins/wp-rest-api-authentication/) |
+| ---------------------------------------------------------------------- | :-----------------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------------: | :--------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: |
+| Blocks the REST API for logged-out visitors                            |                                     ✓                                     |                                  ✓                                  |                                     ✓                                     |                                   ✓                                    |                                                ✓                                                 |
+| Allows individual routes, including those of other plugins             |                                     ✓                                     |                                  ✓                                  |                                     –                                     |                            via code filter                             |                                  core routes; others in premium                                  |
+| Allows whole namespaces                                                |                                     ✓                                     |                                  ✓                                  |                                     –                                     |                                   ?                                    |                                                ?                                                 |
+| Rules per user role                                                    |                                     ✓                                     |                                  ✓                                  |                                     –                                     |                              admins only                               |                                             premium                                              |
+| Separate rules for reading and writing                                 |                                     ✓                                     |                                  ?                                  |                                     –                                     |                                   ?                                    |                                                ?                                                 |
+| IP allow and deny lists                                                |                            ✓ with CIDR ranges                             |                                  ?                                  |                         allow list in paid add-on                         |                                   ?                                    |                                                ?                                                 |
+| Front-end plugins keep working out of the box                          | ✓ Contact Form 7, WooCommerce Store API, oEmbed, LiteSpeed, WP Statistics |                                  ?                                  |                    – (manual guide for Contact Form 7)                    |                 ✓ Contact Form 7, LiteSpeed and others                 |                                                ?                                                 |
+| Custom error message and status code                                   |                                     ✓                                     |                         message via filter                          |                 message via filter; status in paid add-on                 |                                   ?                                    |                                                ?                                                 |
+| Shows which plugin registered a route, log of blocked requests, WP-CLI |                                     ✓                                     |                                  ?                                  |                                     –                                     |                                   ?                                    |                                                ?                                                 |
+| Token authentication (JWT, OAuth, API keys)                            |                                     –                                     |                                  –                                  |                                     –                                     |                                   –                                    |                                        ✓ its main purpose                                        |
+| Price                                                                  |                                   free                                    |                                free                                 |                     free; paid add-on REST Pro Tools                      |                            from $29.95/year                            |                                     free; premium $499/year                                      |
+
+As of 9 November 2026 – Disable REST API 1.8 (last updated September 2023), Disable WP REST API 2.6.9, Perfmatters 2.6.9, JWT Authentication for WP REST APIs 5.0.0 – from each plugin's own documentation; `?` means it is not documented there. If something has changed, a correction is welcome.
+
+Where WireCore REST Control is behind today: it is new, while the others have run on tens of thousands of sites for years. It does not authenticate requests itself – for JWT, OAuth or API keys, use an authentication plugin alongside it, or WordPress' application passwords. It does not rename endpoints or fields like [WP REST API Controller](https://wordpress.org/plugins/wp-rest-api-controller/). And in a multisite the rules are set per site; there are no network-wide rules.
 
 ## Installation
 
