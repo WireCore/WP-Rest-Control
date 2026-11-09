@@ -147,7 +147,7 @@ Only the files needed by the plugin are shipped. Development files are excluded 
 ## Releasing
 
 1. Bump `Version:` in `wirecore-rest-control.php` and `Stable tag:` in `readme.txt`, and add the changelog entry to `readme.txt` and `CHANGELOG.md`.
-2. Commit and push to `main`, wait for CI to pass.
+2. Merge it into `main` via pull request (CI must pass).
 3. Create and push a tag with the version number, without a `v` prefix:
 
     ```bash
@@ -156,7 +156,9 @@ Only the files needed by the plugin are shipped. Development files are excluded 
 
 [`.github/workflows/release.yml`](.github/workflows/release.yml) then checks that tag, plugin header and stable tag match, deploys the package (files selected by `.distignore`, assets from `.wordpress-org/`) to the wordpress.org SVN repository and creates a GitHub release with the ZIP.
 
-One-time setup: add the secrets `SVN_USERNAME` and `SVN_PASSWORD` (the SVN password from the wordpress.org profile under _Account & Security_) to the GitHub environment `wordpress.org`. The very first version is submitted manually at [wordpress.org/plugins/developers/add](https://wordpress.org/plugins/developers/add/); the workflow takes over once the plugin has been approved.
+Changes to `readme.txt` (e.g. "Tested up to") or `.wordpress-org/` alone don't need a release: [`.github/workflows/assets.yml`](.github/workflows/assets.yml) publishes them when they reach `main`, as long as the code on `main` matches the released version. It can also be started manually under _Actions_.
+
+One-time setup: add the secrets `SVN_USERNAME` and `SVN_PASSWORD` (the SVN password from the wordpress.org profile under _Account & Security_) to the GitHub environment `wordpress.org`, and allow the tag pattern `*.*.*` and the branch `main` under its deployment branches and tags. The very first version is submitted manually at [wordpress.org/plugins/developers/add](https://wordpress.org/plugins/developers/add/); the workflow takes over once the plugin has been approved.
 
 ## License
 

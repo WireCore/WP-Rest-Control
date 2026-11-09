@@ -49,4 +49,4 @@ Tests live in `tests/` (`test-*.php`, base class `WireCore_RC_TestCase`). They a
 
 ## Release
 
-Bump `Version:` in `wirecore-rest-control.php` and `Stable tag:` in `readme.txt` together, and add the entry to the changelog in `readme.txt` and `CHANGELOG.md`. Pushing a tag like `1.0.1` (no `v`) runs `.github/workflows/release.yml`, which verifies the version numbers and deploys to the wordpress.org SVN repository.
+Bump `Version:` in `wirecore-rest-control.php` and `Stable tag:` in `readme.txt` together, and add the entry to the changelog in `readme.txt` and `CHANGELOG.md`. Pushing a tag like `1.0.1` (no `v`) runs `.github/workflows/release.yml`, which verifies the version numbers and deploys to the wordpress.org SVN repository. Changes to `readme.txt` or `.wordpress-org/` alone reach wordpress.org through `.github/workflows/assets.yml` on `main`, no release needed. Actions are pinned to commit SHAs (comment with the version), Dependabot updates them.

@@ -1,0 +1,47 @@
+name: Update readme and assets
+
+# Publishes changes to readme.txt (e.g. "Tested up to") and .wordpress-org/
+# to wordpress.org without a new version. Code changes still need a release
+# (see release.yml) – the deploy action stops if anything else in the package
+# differs from SVN trunk.
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - readme.txt
+            - .wordpress-org/**
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    update:
+        name: Update readme and assets on wordpress.org
+        runs-on: ubuntu-latest
+        environment: wordpress.org
+        steps:
+            - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+            # A release bumps the version on main before its tag is pushed;
+            # release.yml deploys that version, so there is nothing to do here.
+            - name: Check that the version is released
+              id: released
+              run: |
+                  version=$(sed -n 's/^Version: *//p' wirecore-rest-control.php | tr -d '\r')
+                  if curl -sfI "https://plugins.svn.wordpress.org/wirecore-rest-control/tags/$version/" > /dev/null; then
+                    echo "released=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "::notice::Version $version is not on wordpress.org yet; release.yml deploys it."
+                    echo "released=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Update readme and assets
+              if: steps.released.outputs.released == 'true'
+              uses: 10up/action-wordpress-plugin-asset-update@2480306f6f693672726d08b5917ea114cb2825f7 # 2.2.0
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  SLUG: wirecore-rest-control
+                  ASSETS_DIR: .wordpress-org
